@@ -1,5 +1,5 @@
-import { api } from '../api';
-import type { ApiResult } from '../api';
+import { api } from './client';
+import type { ApiResult } from './client';
 import type { PaymentRecord, PaymentRecordDetail, PaymentRegistrationSession } from './types';
 
 interface PaymentRegistrationSessionRaw {

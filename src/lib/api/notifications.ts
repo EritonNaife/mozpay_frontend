@@ -1,4 +1,4 @@
-import type { ApiResult } from '../api';
+import type { ApiResult } from './client';
 import type { NotificationItem } from './types';
 
 export async function listNotifications(): Promise<ApiResult<NotificationItem[]>> {

@@ -1,4 +1,4 @@
-import type { ApiResult } from '../api';
+import type { ApiResult } from './client';
 import type { DisputeItem, CreateDisputeRequest, ResolveDisputeRequest } from './types';
 
 export async function listDisputes(): Promise<ApiResult<DisputeItem[]>> {

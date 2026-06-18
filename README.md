@@ -25,7 +25,7 @@ This repository contains only the **SvelteKit 5 PWA frontend**. The Django + DRF
 ## Prerequisites
 
 - [Node.js 22](https://nodejs.org/)
-- A running MozPay backend (see [`mozpay`](https://github.com/EritonNaife/mozpay))
+- A running MozPay backend **or** enable the built-in mock API (see [Mock API](#mock-api))
 
 ---
 
@@ -50,6 +50,7 @@ cp .env.example .env
 | `BACKEND_URL` | Django backend base URL | `http://localhost:8000` |
 | `JWT_SIGNING_KEY` | Must match the backend `JWT_SIGNING_KEY` | `unsafe-local-jwt-signing-key-for-development-only` |
 | `ALLOWED_ORIGINS` | Comma-separated allowed origins for CSRF checks | `http://localhost:5173,http://localhost:8000` |
+| `VITE_USE_MOCK_API` | Run the frontend with the built-in mock API (no backend needed) | `false` |
 
 ### 3. Start the dev server
 
@@ -60,6 +61,27 @@ npm run dev
 The app will be available at `http://localhost:5173`.
 
 All `/api` requests are proxied to the backend configured in `BACKEND_URL`, so no CORS setup is required in development.
+
+---
+
+## Mock API
+
+The frontend ships with a built-in mock API layer so you can run it standalone without a backend. It covers auth, merchant/customer dashboards, plans, payments, notifications, disputes, and scoring.
+
+To use it, set the environment variable before starting the dev server:
+
+```bash
+# In .env
+VITE_USE_MOCK_API=true
+```
+
+Or inline:
+
+```bash
+VITE_USE_MOCK_API=true npm run dev
+```
+
+Mock data lives in `src/lib/api/mock/` and is shared in memory while the dev server is running. Create plans, register payments, and resolve disputes to see the UI update immediately.
 
 ---
 
@@ -110,7 +132,7 @@ mozpay_frontend/
 │   ├── app.css               # Global styles + Tailwind imports
 │   ├── hooks.server.ts       # Server-side hooks (auth refresh, CSRF)
 │   ├── lib/
-│   │   ├── api/              # Typed API clients (auth, merchant, plans, payments, ...)
+│   │   ├── api/              # Typed API clients + mock layer (auth, merchant, plans, payments, ...)
 │   │   ├── components/       # Reusable Svelte components
 │   │   ├── icons/            # SVG icon paths
 │   │   ├── stores/           # Svelte 5 $state rune stores

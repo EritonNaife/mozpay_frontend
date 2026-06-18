@@ -1,5 +1,5 @@
-import { api } from '../api';
-import type { ApiResult } from '../api';
+import { api } from './client';
+import type { ApiResult } from './client';
 import { toCamelCase } from '$lib/utils/case';
 import type { CreateMerchantProfileRequest, MerchantDashboard, MerchantProfileResponse } from './types';
 

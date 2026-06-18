@@ -1,4 +1,4 @@
-import { api } from '../api';
+import { api } from './client';
 import type { OtpVerifyResponse, Role } from './types';
 
 export function requestOtp(phone: string, role?: Role) {
