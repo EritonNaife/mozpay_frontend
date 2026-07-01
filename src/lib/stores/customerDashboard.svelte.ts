@@ -1,4 +1,4 @@
-import { getCustomerDashboard } from '$lib/api/customers';
+import { getCustomerDashboard } from '$lib/api';
 import type { CustomerDashboard } from '$lib/api/types';
 
 class CustomerDashboardStore {

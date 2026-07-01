@@ -1,6 +1,21 @@
 import type { ApiResult } from '../client';
-import type { PaymentRecord, PaymentRecordDetail, PaymentRegistrationSession } from '../types';
-import { addPayment, getPaymentDetail, payments, plans, recordPaymentSession, uuid } from './data';
+import type {
+    PaymentHistoryItem,
+    PaymentHistoryStats,
+    PaymentRecord,
+    PaymentRecordDetail,
+    PaymentRegistrationSession,
+} from '../types';
+import {
+    addPayment,
+    getPaymentDetail,
+    getPaymentStats as buildPaymentStats,
+    paymentHistory,
+    payments,
+    plans,
+    recordPaymentSession,
+    uuid,
+} from './data';
 
 export async function startPaymentRegistrationSession(planId: string): Promise<ApiResult<PaymentRegistrationSession>> {
     const plan = plans.find((p) => p.id === planId);
@@ -40,4 +55,13 @@ export async function confirmPayment(id: string): Promise<ApiResult<PaymentRecor
     const payment = payments.find((p) => p.id === id);
     if (!payment) return { ok: false, error: 'NOT_FOUND', message: 'Pagamento não encontrado' };
     return { ok: true, data: payment };
+}
+
+/** Merchant payment-history feed (distinct from the plan payment records above). */
+export async function listPaymentHistory(): Promise<ApiResult<PaymentHistoryItem[]>> {
+    return { ok: true, data: [...paymentHistory] };
+}
+
+export async function getPaymentStats(): Promise<ApiResult<PaymentHistoryStats>> {
+    return { ok: true, data: buildPaymentStats() };
 }

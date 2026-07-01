@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { StatusBar, Icon, HomeIndicator } from '$lib/components/index.js';
 	import { plansStore } from '$lib/stores';
+	import { BRAND_NAME } from '$lib/brand.js';
 
 	onMount(() => { plansStore.load(); });
 </script>
@@ -17,15 +18,15 @@
 	<div style="padding:0 12px 16px;max-width:440px;margin:0 auto;width:100%">
 		<div class="mz-blur-bg" style="background:rgba(255,255,255,.13);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:20px;padding:14px 15px;border:1px solid rgba(255,255,255,.14)">
 			<div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
-				<div style="width:24px;height:24px;border-radius:7px;background:linear-gradient(155deg,#274BB0,#16306E);display:flex;align-items:center;justify-content:center;flex:0 0 auto">
+				<div style="width:24px;height:24px;border-radius:7px;background:linear-gradient(155deg,var(--blue-900),var(--blue-800));display:flex;align-items:center;justify-content:center;flex:0 0 auto">
 					<span style="font-family:var(--display);font-weight:600;font-size:13px;color:#fff">M</span>
 				</div>
-				<span style="color:rgba(255,255,255,.92);font-size:12.5px;font-weight:600;flex:1">MENSAGEM · MozPay</span>
+				<span style="color:rgba(255,255,255,.92);font-size:12.5px;font-weight:600;flex:1">MENSAGEM · {BRAND_NAME}</span>
 				<span style="color:rgba(255,255,255,.6);font-size:12px">agora</span>
 			</div>
 			<div style="color:#fff;font-size:14px;line-height:1.5">
 				Um comerciante criou um plano de prestações para si.
-				Confirme se reconhece esta compra: <span style="color:#8FB4FF">mozpay.co.mz/c/8F2K</span>
+				Confirme se reconhece esta compra: <span style="color:var(--amber-600)">mozpay.co.mz/c/8F2K</span>
 			</div>
 		</div>
 	</div>

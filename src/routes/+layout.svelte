@@ -3,6 +3,7 @@
 	import '../app.css';
 	import Toast from '$lib/components/Toast.svelte';
 	import { hydrate } from '$lib/stores';
+	import { BRAND_NAME } from '$lib/brand.js';
 	let { data, children } = $props();
 
 	$effect(() => {
@@ -19,7 +20,7 @@
 </script>
 
 <svelte:head>
-	<title>MozPay</title>
+	<title>{BRAND_NAME}</title>
 	<meta name="description" content="Pagamentos a prestações — sem burocracia" />
 </svelte:head>
 

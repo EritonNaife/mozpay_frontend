@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { StatusBar, AppBar, Btn, Field, Banner, Brand, Footer, HomeIndicator, OtpInput, Segmented, Icon } from '$lib/components/index.js';
-	import { requestOtp, setPin } from '$lib/api/auth';
-	import { createProfile } from '$lib/api/merchant';
+	import { requestOtp, setPin, createProfile } from '$lib/api';
 	import { login, merchantProfileStore, auth, setHasPin } from '$lib/stores';
+	import { BRAND_NAME } from '$lib/brand.js';
 
 	let step = $state<'login' | 'pin' | 'otp' | 'profile' | 'setpin'>('login');
 	let phoneNumber = $state('');
@@ -162,7 +162,7 @@
 	<StatusBar />
 	<div class="mz-body" style="padding:0 22px;justify-content:center">
 		<Brand size={58} showName />
-		<h1 class="mz-h1" style="margin-top:40px">Entrar no MozPay</h1>
+		<h1 class="mz-h1" style="margin-top:40px">Entrar no {BRAND_NAME}</h1>
 		<p class="mz-sub" style="margin-top:10px;max-width:280px">Introduza o seu número de telemóvel. Vamos enviar-lhe um código por SMS para confirmar.</p>
 		<div style="margin-top:28px"><Field label="Número de telemóvel" bind:value={phoneNumber} input type="tel" inputmode="tel" /></div>
 		<div style="display:flex;gap:8px;align-items:center;margin-top:14px;color:var(--muted);font-size:12.5px">
@@ -184,7 +184,7 @@
 		<Btn variant="primary" block lg disabled={loading} iconEnd={loading ? undefined : 'fwd'} onclick={handlePhoneSubmit}>
 			{loading ? 'A enviar...' : 'Continuar'}
 		</Btn>
-		<p style="font-size:11px;color:var(--faint);text-align:center;line-height:1.5">Ao continuar aceita os Termos e a Política de Privacidade do MozPay.</p>
+		<p style="font-size:11px;color:var(--faint);text-align:center;line-height:1.5">Ao continuar aceita os Termos e a Política de Privacidade do {BRAND_NAME}.</p>
 	</Footer>
 	<HomeIndicator />
 
@@ -209,7 +209,7 @@
 			<div style="margin-top:22px"><Banner tone="red" icon="alert" title="Erro">{error}</Banner></div>
 		{/if}
 		<div style="margin-top:auto">
-			<Banner tone="blue" icon="info" title="Sabia que?">Nunca partilhe o seu PIN com ninguém. O MozPay nunca lhe pede o PIN.</Banner>
+			<Banner tone="blue" icon="info" title="Sabia que?">Nunca partilhe o seu PIN com ninguém. O {BRAND_NAME} nunca lhe pede o PIN.</Banner>
 		</div>
 	</div>
 	<Footer>
@@ -245,7 +245,7 @@
 			<div style="margin-top:22px"><Banner tone="red" icon="alert" title="Erro">{error}</Banner></div>
 		{/if}
 		<div style="margin-top:auto">
-			<Banner tone="blue" icon="info" title="Sabia que?">O MozPay nunca lhe pede o código por chamada. Não o partilhe com ninguém.</Banner>
+			<Banner tone="blue" icon="info" title="Sabia que?">O {BRAND_NAME} nunca lhe pede o código por chamada. Não o partilhe com ninguém.</Banner>
 		</div>
 	</div>
 	<Footer>

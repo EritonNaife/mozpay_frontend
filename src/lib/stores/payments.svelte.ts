@@ -1,8 +1,22 @@
-import { listPayments, recordPayment, startPaymentRegistrationSession } from '$lib/api/payments';
-import type { PaymentRecord, PaymentRecordDetail, PaymentRegistrationSession } from '$lib/api/types';
+import {
+	listPayments,
+	listPaymentHistory,
+	getPaymentStats,
+	recordPayment,
+	startPaymentRegistrationSession,
+} from '$lib/api';
+import type {
+	PaymentHistoryItem,
+	PaymentHistoryStats,
+	PaymentRecord,
+	PaymentRecordDetail,
+	PaymentRegistrationSession,
+} from '$lib/api/types';
 
 class PaymentsStore {
 	data: PaymentRecord[] | null = $state(null);
+	history: PaymentHistoryItem[] | null = $state(null);
+	historyStats: PaymentHistoryStats | null = $state(null);
 	registrationSession: PaymentRegistrationSession | null = $state(null);
 	lastPayment: PaymentRecordDetail | null = $state(null);
 	loading = $state(false);
@@ -18,6 +32,28 @@ class PaymentsStore {
 			this.data = [];
 		} else {
 			this.error = res.message || res.error;
+		}
+		this.loading = false;
+	}
+
+	/** Load the merchant payment-history feed and its aggregate stats. */
+	async loadHistory() {
+		this.loading = true;
+		this.error = null;
+		const [rows, stats] = await Promise.all([listPaymentHistory(), getPaymentStats()]);
+		if (rows.ok) {
+			this.history = rows.data;
+		} else if (rows.error === 'NOT_IMPLEMENTED') {
+			this.history = [];
+		} else {
+			this.error = rows.message || rows.error;
+		}
+		if (stats.ok) {
+			this.historyStats = stats.data;
+		} else if (stats.error === 'NOT_IMPLEMENTED') {
+			this.historyStats = null;
+		} else {
+			this.error = stats.message || stats.error;
 		}
 		this.loading = false;
 	}

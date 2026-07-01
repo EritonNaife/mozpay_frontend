@@ -5,7 +5,12 @@
 	import { auth } from '$lib/stores';
 
 	let { children } = $props();
-	let bare = $derived(page.url.pathname.startsWith('/customer/consent') || page.url.pathname.startsWith('/customer/login'));
+	let bare = $derived(
+		page.url.pathname.startsWith('/customer/consent') ||
+		page.url.pathname.startsWith('/customer/login') ||
+		page.url.pathname.startsWith('/customer/payment') ||
+		/^\/customer\/plans\/[^/]+$/.test(page.url.pathname)
+	);
 </script>
 
 {#if bare}

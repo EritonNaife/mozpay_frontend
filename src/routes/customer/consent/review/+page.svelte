@@ -8,6 +8,7 @@
 	import { money } from '$lib/utils/index.js';
 	import { getConfirmationContext, confirmPlan, rejectPlan } from '$lib/api/plans';
 	import type { ConfirmationContext } from '$lib/api/types';
+	import { BRAND_NAME } from '$lib/brand.js';
 
 	let token = $state('');
 	let context = $state<ConfirmationContext | null>(null);
@@ -123,7 +124,7 @@
 		<!-- Installment schedule -->
 		<span class="mz-h2" style="font-size:15.5px;margin-top:2px">Calendário de pagamentos</span>
 		<div class="mz-list mz-list--card" style="margin-top:-4px">
-			{#each plan.installments as inst}
+			{#each plan.installments as inst (inst.sequence)}
 				{@const cfg = instPill(inst.status)}
 				<div class="mz-row" style="padding:12px 15px">
 					<div style="width:30px;height:30px;border-radius:50%;flex:0 0 auto;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:600;font-size:12px">
@@ -143,7 +144,7 @@
 
 		<div style="margin-top:auto">
 			<Banner tone="green" icon="shield" title="Sem juros escondidos">
-				Paga exactamente o valor acordado. Confirmar começa a construir a sua pontuação de confiança MozPay.
+				Paga exactamente o valor acordado. Confirmar começa a construir a sua pontuação de confiança {BRAND_NAME}.
 			</Banner>
 		</div>
 	</div>

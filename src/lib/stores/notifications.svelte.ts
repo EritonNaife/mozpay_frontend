@@ -1,4 +1,4 @@
-import { listNotifications, markRead } from '$lib/api/notifications';
+import { listNotifications, markRead } from '$lib/api';
 import type { NotificationItem } from '$lib/api/types';
 
 class NotificationsStore {

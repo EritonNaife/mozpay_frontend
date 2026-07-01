@@ -1,4 +1,4 @@
-import { getProfile } from '$lib/api/merchant';
+import { getProfile } from '$lib/api';
 import type { MerchantProfileResponse } from '$lib/api/types';
 
 class MerchantProfileStore {

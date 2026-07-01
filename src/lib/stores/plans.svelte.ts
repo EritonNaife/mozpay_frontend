@@ -1,4 +1,4 @@
-import { listPlans, getPlan } from '$lib/api/plans';
+import { listPlans, getPlan } from '$lib/api';
 import type { PlanSummary, PlanDetail } from '$lib/api/types';
 
 class PlansStore {

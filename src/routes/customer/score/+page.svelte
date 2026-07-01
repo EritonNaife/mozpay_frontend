@@ -1,23 +1,20 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { StatusBar, AppBar, Icon, Pill, Banner, ScoreRing, HomeIndicator, Skeleton, ErrorState } from '$lib/components/index.js';
+	import { StatusBar, Icon, Banner, LuxuryScoreDial, HomeIndicator, Skeleton, ErrorState } from '$lib/components/index.js';
 	import { scoringStore } from '$lib/stores';
 	import type { ScoreLabel } from '$lib/api/types';
+	import { BRAND_NAME } from '$lib/brand.js';
 
-	interface Factor { icon: string; tone: 'green' | 'amber' | 'blue'; label: string; value: string; }
-	const factors: Factor[] = [
-		{ icon: 'check', tone: 'green', label: 'Prestações pagas a tempo', value: '—' },
-		{ icon: 'clock', tone: 'amber', label: 'Dias médios de atraso', value: '—' },
-		{ icon: 'trophy', tone: 'blue', label: 'Planos concluídos', value: '—' },
-		{ icon: 'store', tone: 'blue', label: 'Lojas onde já comprou', value: '—' },
-	];
-
-	const colMap: Record<string, string> = { green: 'var(--green)', amber: 'var(--amber)', blue: 'var(--blue-800)' };
-	const bgMap: Record<string, string> = { green: 'var(--green-tint)', amber: 'var(--amber-tint)', blue: 'var(--blue-tint)' };
+	const toneColor: Record<string, string> = {
+		green: 'var(--green)',
+		amber: 'var(--amber)',
+		red: 'var(--red)',
+		slate: 'var(--muted)',
+	};
 
 	const labelMap: Record<ScoreLabel, string> = {
 		'Excellent': 'Excelente',
-		'Building': 'Em construção',
+		'Building': 'Perfil em consolidação',
 		'Needs Attention': 'Precisa de atenção',
 	};
 
@@ -25,43 +22,41 @@
 </script>
 
 <StatusBar />
-<AppBar title="Confiança" sub="A sua reputação MozPay" back />
 
-<div class="mz-body mz-body--pad" style="gap:13px;overflow:hidden">
+<div class="mz-body mz-body--pad" style="gap:0;overflow-y:auto">
 	{#if scoringStore.loading}
-		<Skeleton />
+		<Skeleton height="240px" />
 	{:else if scoringStore.error}
 		<ErrorState title="Erro ao carregar pontuação" sub={scoringStore.error} onretry={() => scoringStore.load()} />
-	{:else}
-		{@const score = scoringStore.data?.score ?? 50}
-		{@const label = scoringStore.data?.label ?? 'Building'}
-		<!-- Score card -->
-		<div class="mz-card mz-card--pad" style="display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:18px;padding-bottom:18px">
-			<ScoreRing {score} size={120} />
-			<div style="margin-top:12px"><Pill tone="amber" dot>{labelMap[label]}</Pill></div>
-			<p class="mz-sub" style="margin-top:9px;max-width:250px">
-				Continue a pagar a tempo para <strong style="color:var(--green)">melhorar</strong>. Cada prestação a tempo conta.
-			</p>
+	{:else if scoringStore.data}
+		{@const d = scoringStore.data}
+		{@const tier = d.tier ?? labelMap[d.label]}
+		{@const outOf = d.scoreOutOf ?? 100}
+		{@const factors = d.factors ?? []}
+
+		<h1 style="font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.3px;color:var(--ink);margin:0">Confiança</h1>
+
+		<div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 0 20px">
+			<LuxuryScoreDial score={d.score} size={110} />
+			<div style="font-family:var(--display);font-weight:600;font-size:16px;color:var(--ink);letter-spacing:-.1px;margin-top:12px">{tier}</div>
+			<div style="font-size:11px;color:var(--muted);font-weight:500;margin-top:3px;letter-spacing:.02em">{d.score} de {outOf} pontos</div>
 		</div>
 
-		<!-- Factors -->
-		<span class="mz-lbl" style="margin-left:2px">O que conta para a sua pontuação</span>
-		<div class="mz-list mz-list--card" style="margin-top:-2px">
-			{#each factors as f}
-				<div class="mz-row" style="padding:12px 14px">
-					<div style="width:36px;height:36px;border-radius:11px;background:{bgMap[f.tone]};color:{colMap[f.tone]};display:flex;align-items:center;justify-content:center;flex:0 0 auto">
-						<Icon name={f.icon} size={18} stroke={1.9} />
-					</div>
-					<div class="mz-row__main"><div class="mz-row__title" style="font-size:14px">{f.label}</div></div>
-					<span style="font-size:13px;font-weight:700;color:{colMap[f.tone]}">{f.value}</span>
+		<Banner tone="amber" icon="trophy" title="Pague a tempo">Cada pagamento pontual melhora a sua pontuação de confiança.</Banner>
+
+		<span class="mz-eyebrow" style="margin:16px 2px 8px">Factores</span>
+		<div class="mz-list mz-list--card mz-list--divided">
+			{#each factors as f (f.label)}
+				<div class="mz-row">
+					<Icon name={f.icon} size={16} stroke={1.8} style="color:{toneColor[f.tone] ?? 'var(--muted)'};flex:0 0 auto" />
+					<div class="mz-row__main"><div class="mz-row__title" style="font-weight:500;font-size:14px">{f.label}</div></div>
+					<span style="font-size:12px;font-weight:600;color:var(--ink);background:rgba(0,0,0,.03);padding:4px 10px;border-radius:8px;flex:0 0 auto">{f.value}</span>
 				</div>
 			{/each}
 		</div>
 
-		<div style="margin-top:auto">
-			<Banner tone="blue" icon="info" title="A sua pontuação é sua">
-				Vale em qualquer comerciante MozPay. Quanto mais alta, mais fácil comprar a prestações em qualquer loja.
-			</Banner>
+		<div style="margin-top:14px">
+			<Banner tone="blue" icon="info" title="Sabia que?">A sua pontuação de confiança viaja consigo para todos os comerciantes {BRAND_NAME}.</Banner>
 		</div>
 	{/if}
 </div>

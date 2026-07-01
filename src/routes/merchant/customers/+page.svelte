@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 	import { StatusBar, AppBar, Avatar, Pill, HomeIndicator, Icon, Skeleton, EmptyState, ErrorState } from '$lib/components/index.js';
-	import { scoreInfo } from '$lib/utils/index.js';
+	import { RISK, money } from '$lib/utils/index.js';
 	import { customersStore } from '$lib/stores';
 
 	onMount(() => { customersStore.load(); });
 </script>
 
 <StatusBar />
-<AppBar title="Clientes" sub="{customersStore.data?.length ?? 0} no total">
-	{#snippet action()}<div class="mz-appbar__btn"><Icon name="plus" size={20} stroke={2.1} /></div>{/snippet}
-</AppBar>
+<AppBar title="Clientes" sub="{customersStore.data?.length ?? 0} clientes activos" />
 
 {#if customersStore.loading}
 	<div class="mz-body mz-body--pad" style="gap:12px;overflow:hidden"><Skeleton height="200px" /></div>
@@ -20,29 +19,21 @@
 	<div class="mz-body mz-body--pad" style="gap:12px;overflow:hidden"><EmptyState icon="users" title="Sem clientes" sub="Nenhum cliente encontrado" /></div>
 {:else}
 	<div class="mz-body mz-body--pad" style="gap:12px;overflow:hidden">
-		<div class="mz-field" style="flex-direction:row;align-items:center;gap:9px;padding:12px 14px">
-			<Icon name="search" size={18} stroke={1.9} style="color:var(--faint)" />
-			<span style="color:var(--faint);font-size:14.5px">Procurar por nome ou número…</span>
-		</div>
-		<div class="mz-seg">
-			<span class="mz-seg__i mz-seg__i--on">Todos</span>
-			<span class="mz-seg__i">Em atraso</span>
-			<span class="mz-seg__i">A confirmar</span>
-		</div>
 		<div class="mz-list mz-list--card">
-			{#each customersStore.data as c}
-				{@const info = scoreInfo(c.score)}
-				<a href="/merchant/customers/{c.id}" class="mz-row" style="text-decoration:none;color:inherit">
-					<Avatar name={c.name} tone={c.tone} size={44} />
+			{#each customersStore.data as c (c.id)}
+				{@const rk = RISK[c.risk ?? 'low']}
+				<button type="button" class="mz-row" style="text-align:left;width:100%;background:none;border:none;cursor:pointer" onclick={() => goto(`/merchant/customers/${c.id}`)}>
+					<Avatar name={c.name} gradient size={38} />
 					<div class="mz-row__main">
 						<div class="mz-row__title">{c.name}</div>
-						<div class="mz-row__sub">{c.activePlans} plano(s) activo(s)</div>
+						<div class="mz-row__sub">{c.activePlans} plano(s) · Último pag. {c.lastPayment}</div>
 					</div>
-					<div class="mz-row__end">
-						<Pill tone={info.tone} dot>{info.merchant}</Pill>
-						<span class="mz-money" style="font-size:12.5px;color:var(--muted);font-weight:600">{c.phone}</span>
+					<div style="display:flex;align-items:center;gap:10px">
+						<span class="mz-money" style="font-size:14px;font-weight:600;color:var(--ink)">{money(c.totalOwing ?? 0)}</span>
+						<Pill tone={rk.tone} dot>{rk.label}</Pill>
 					</div>
-				</a>
+					<Icon name="chevR" size={14} stroke={1.8} style="color:var(--muted);flex-shrink:0" />
+				</button>
 			{/each}
 		</div>
 	</div>

@@ -22,7 +22,7 @@
 	<div class="mz-body mz-body--pad" style="gap:10px;overflow:hidden">
 		<div class="mz-eyebrow" style="margin-left:2px">Recentes</div>
 		<div class="mz-list mz-list--card" style="margin-top:-2px">
-			{#each notificationsStore.data.filter(n => n.read) as n}
+			{#each notificationsStore.data.filter(n => n.read) as n (n.id)}
 				<div class="mz-row" style="align-items:flex-start;padding:13px 14px;background:var(--blue-tint)">
 					<div style="width:40px;height:40px;border-radius:12px;flex:0 0 auto;background:var(--blue-tint);color:var(--blue-800);display:flex;align-items:center;justify-content:center">
 						<Icon name="bell" size={20} stroke={1.9} />

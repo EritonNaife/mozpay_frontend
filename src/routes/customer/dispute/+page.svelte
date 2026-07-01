@@ -29,7 +29,7 @@
 	<span class="mz-lbl" style="margin-left:2px;margin-top:2px">Qual é o problema?</span>
 
 	<div style="display:flex;flex-direction:column;gap:9px" role="radiogroup" aria-label="Motivo da contestação">
-		{#each reasons as r}
+		{#each reasons as r (r.value)}
 			<OptionCard bind:value={reason} option={r.value} title={r.label} icon={r.icon} />
 		{/each}
 	</div>

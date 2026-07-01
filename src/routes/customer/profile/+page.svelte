@@ -1,65 +1,55 @@
 <script lang="ts">
-	import { StatusBar, AppBar, Icon, Pill, ScoreRing } from '$lib/components/index.js';
-	import { scoreInfo } from '$lib/utils/index.js';
-	import { auth, logout } from '$lib/stores';
+	import { onMount } from 'svelte';
+	import { StatusBar, Icon, MonogramAvatar, HomeIndicator } from '$lib/components/index.js';
+	import { auth, logout, customerDashboardStore } from '$lib/stores';
+	import { BRAND_NAME } from '$lib/brand.js';
 
-	const info = scoreInfo(0);
-	const settingsBase = [
-		{ icon: 'pencil', label: 'Editar perfil', href: '#' },
+	const rows = [
+		{ icon: 'lock', label: 'Alterar PIN', href: '/customer/profile/change-pin' },
 		{ icon: 'bell', label: 'Notificações', href: '/customer/notifications' },
-		{ icon: 'info', label: 'Ajuda e suporte', href: '#' },
-		{ icon: 'close', label: 'Terminar sessão', href: '/', danger: true },
+		{ icon: 'shield', label: 'Segurança', href: '#' },
+		{ icon: 'info', label: `Sobre o ${BRAND_NAME}`, href: '#' },
 	];
 
-	let settings = $derived(
-		auth.hasPin
-			? [{ icon: 'lock', label: 'Alterar PIN', href: '/customer/profile/change-pin' }, ...settingsBase]
-			: settingsBase
-	);
+	let userName = $derived(customerDashboardStore.data?.userName || auth.phone || 'Cliente');
+	let userPhone = $derived(customerDashboardStore.data?.userPhone || auth.phone || '');
+
+	onMount(() => { customerDashboardStore.load(); });
 </script>
 
 <StatusBar />
-<AppBar title="Perfil" />
 
-<div class="mz-body mz-body--pad" style="gap:16px">
-	<div class="mz-narrow" style="display:flex;flex-direction:column;gap:14px;width:100%">
-		<div class="mz-card mz-card--pad">
-			<div style="display:flex;align-items:center;gap:14px">
-				<div style="width:52px;height:52px;border-radius:14px;background:var(--blue-tint);color:var(--blue-800);display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-family:var(--display);font-weight:600;font-size:18px">
-					{(auth.phone || 'CL').slice(0, 2).toUpperCase()}
-				</div>
-				<div style="flex:1;min-width:0">
-					<div class="mz-h2" style="font-size:17px;margin-bottom:2px">{auth.phone || 'Cliente'}</div>
-					<div class="mz-sub">{auth.phone || '—'}</div>
-				</div>
-			</div>
-			<div style="display:flex;align-items:center;gap:14px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line-2)">
-				<ScoreRing score={0} size={62} />
-				<div>
-					<Pill tone={info.tone} dot>{info.customer}</Pill>
-					<div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.4">Pague a tempo para subir de nível</div>
-				</div>
-			</div>
+<div class="mz-body">
+	<div class="mz-narrow" style="width:100%">
+		<div style="padding:14px 18px 6px;font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.3px">Conta</div>
+
+		<div style="display:flex;flex-direction:column;align-items:center;padding:12px 18px 24px">
+			<MonogramAvatar name={userName} size={60} />
+			<div style="font-family:var(--display);font-weight:600;font-size:18px;margin-top:8px;letter-spacing:-.2px">{userName}</div>
+			<div style="font-size:13px;color:var(--ink-2);margin-top:3px;letter-spacing:.03em">+258 {userPhone}</div>
 		</div>
 
-		<span class="mz-lbl">Configurações</span>
-		<div class="mz-list mz-list--card">
-			{#each settings as s}
+		<div style="padding:0 18px">
+			<div class="mz-eyebrow">Definições</div>
+			{#each rows as r, i (r.label)}
 				<a
-					href={s.href}
-					class="mz-row"
-					style="text-decoration:none;color:inherit"
-					onclick={s.danger ? (e) => { e.preventDefault(); logout(); } : undefined}
+					href={r.href}
+					style="width:100%;display:flex;align-items:center;gap:14px;padding:18px 0;text-decoration:none;color:inherit;{i ? 'border-top:1px solid var(--line-2)' : ''}"
 				>
-					<div style="width:36px;height:36px;border-radius:11px;background:{s.danger ? 'var(--red-tint)' : 'var(--surface-2)'};color:{s.danger ? 'var(--red)' : 'var(--ink-2)'};display:flex;align-items:center;justify-content:center;flex:0 0 auto">
-						<Icon name={s.icon} size={18} stroke={1.9} />
-					</div>
-					<div class="mz-row__main">
-						<div class="mz-row__title" style="color:{s.danger ? 'var(--red)' : 'var(--ink)'}">{s.label}</div>
-					</div>
-					<Icon name="chevR" size={16} style="color:var(--faint)" />
+					<Icon name={r.icon} size={18} stroke={1.6} style="color:var(--ink-2);flex:0 0 auto" />
+					<span style="flex:1;font-weight:500;font-size:14px;color:var(--ink)">{r.label}</span>
+					<Icon name="chevR" size={14} stroke={1.8} style="color:var(--muted)" />
 				</a>
 			{/each}
+
+			<div style="margin-top:40px">
+				<button
+					onclick={() => logout()}
+					style="background:none;border:none;padding:0;cursor:pointer;font-family:var(--ui);font-size:14px;font-weight:500;color:#4A2832;letter-spacing:.02em"
+				>Sair</button>
+			</div>
 		</div>
 	</div>
 </div>
+
+<HomeIndicator />

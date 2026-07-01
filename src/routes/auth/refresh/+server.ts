@@ -1,4 +1,5 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
+import { USE_MOCK, mintMockToken, MOCK_AUTH_RESPONSE } from '$lib/server/mockAuth.js';
 
 const BACKEND = process.env.BACKEND_URL || 'http://localhost:8000';
 const IS_PROD = process.env.NODE_ENV === 'production';
@@ -18,6 +19,18 @@ async function proxy(pathname: string, request: Request, existingToken?: string)
 }
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
+	if (USE_MOCK) {
+		const token = await mintMockToken();
+		cookies.set('mozpay_token', token, {
+			path: '/',
+			httpOnly: true,
+			secure: IS_PROD,
+			sameSite: 'lax',
+			maxAge: 60 * 60 * 24 * 30,
+		});
+		return json(MOCK_AUTH_RESPONSE);
+	}
+
 	const currentToken = cookies.get('mozpay_token');
 	const { status, data } = await proxy('/auth/refresh', request, currentToken);
 

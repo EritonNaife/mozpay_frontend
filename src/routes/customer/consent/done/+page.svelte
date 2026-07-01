@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { StatusBar, AppBar, Icon, Btn, Footer, HomeIndicator } from '$lib/components/index.js';
 	import { auth } from '$lib/stores';
+	import { BRAND_NAME } from '$lib/brand.js';
 
 	let status = $state<'confirmed' | 'rejected'>('confirmed');
 
@@ -48,7 +49,7 @@
 			<Icon name="shield" size={26} stroke={1.8} style="color:var(--blue-800);flex:0 0 auto" />
 			<div>
 				<div style="font-weight:700;font-size:13.5px;color:var(--blue-900)">A sua pontuação de confiança começou</div>
-				<div style="font-size:12.5px;color:var(--ink-2);margin-top:2px;line-height:1.4">Pague a tempo e construa um histórico que vale em qualquer loja MozPay.</div>
+				<div style="font-size:12.5px;color:var(--ink-2);margin-top:2px;line-height:1.4">Pague a tempo e construa um histórico que vale em qualquer loja {BRAND_NAME}.</div>
 			</div>
 		</div>
 	{/if}

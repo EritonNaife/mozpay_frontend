@@ -1,191 +1,170 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { StatusBar, Avatar, Icon, Pill, Banner, HomeIndicator, Skeleton, EmptyState, ErrorState, Field, Btn } from '$lib/components/index.js';
-	import { money } from '$lib/utils/index.js';
-	import { merchantStore, merchantProfileStore, auth, setHasPin } from '$lib/stores';
-	import { setPin } from '$lib/api/auth';
+	import { goto } from '$app/navigation';
+	import { StatusBar, HomeIndicator, MetricCard, Btn, Segmented, Avatar, Pill, Icon, Skeleton, ErrorState } from '$lib/components/index.js';
+	import { PLAN_STATUS, money } from '$lib/utils/index.js';
+	import { merchantStore, merchantProfileStore, plansStore, toast } from '$lib/stores';
 
-	function avgScoreLabel(score: number | null): string {
-		if (score === null) return '—';
-		if (score >= 80) return 'Saudável';
-		if (score >= 40) return 'Estável';
-		return 'Atenção';
+	let filter = $state('todos');
+	const filterOptions = [
+		{ value: 'todos', label: 'Todos' },
+		{ value: 'hoje', label: 'Hoje' },
+		{ value: 'atraso', label: 'Atraso' },
+	];
+
+	let menuOpenId = $state<string | null>(null);
+	let menuX = $state(0);
+	let menuY = $state(0);
+
+	let stats = $derived(merchantStore.stats);
+
+	let rows = $derived((plansStore.data ?? []).filter((p) => {
+		if (filter === 'hoje') return p.state === 'due_today';
+		if (filter === 'atraso') return p.state === 'overdue';
+		return true;
+	}));
+
+	let menuPlan = $derived(rows.find((r) => r.id === menuOpenId) ?? null);
+
+	function toggleMenu(e: MouseEvent, id: string) {
+		e.stopPropagation();
+		if (menuOpenId === id) { menuOpenId = null; return; }
+		const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
+		menuX = r.right;
+		menuY = r.bottom + 4;
+		menuOpenId = id;
 	}
+	function closeMenu() { menuOpenId = null; }
 
-	function avgScoreTone(score: number | null): 'green' | 'amber' | 'red' {
-		if (score === null) return 'amber';
-		if (score >= 80) return 'green';
-		if (score >= 40) return 'amber';
-		return 'red';
+	function verCliente(customerId?: string) {
+		closeMenu();
+		if (customerId) goto(`/merchant/customers/${customerId}`);
 	}
+	function registarPagamento() { closeMenu(); goto('/merchant/payment'); }
+	function enviarLembrete() { closeMenu(); toast.show('Lembrete enviado', 'success'); }
 
-	let greetingName = $derived(merchantProfileStore.data?.business_name ?? 'MozPay');
-	let hasDashboard = $derived(merchantStore.data !== null);
-
-	let showPinSetup = $state(false);
-	let setupPin = $state('');
-	let setupPinConfirm = $state('');
-	let pinLoading = $state(false);
-	let pinError = $state('');
-
-	async function handleSetupPin() {
-		if (setupPin.length !== 6 || setupPin !== setupPinConfirm) {
-			pinError = setupPin !== setupPinConfirm ? 'Os PINs não coincidem.' : '';
-			return;
-		}
-		pinLoading = true;
-		pinError = '';
-		const result = await setPin(setupPin);
-		pinLoading = false;
-		if (!result.ok) { pinError = 'Não foi possível guardar o PIN.'; return; }
-		setHasPin(true);
-		showPinSetup = false;
-	}
+	function reload() { merchantStore.loadStats(); plansStore.load(); }
 
 	onMount(() => {
 		merchantProfileStore.load();
-		merchantStore.load();
+		merchantStore.loadStats();
+		plansStore.load();
 	});
 </script>
 
 <StatusBar />
 
-<!-- Greeting -->
-<div class="mz-appbar" style="padding-top:6px">
-	<Avatar name={greetingName} tone="blue" size={42} />
-	<div class="mz-appbar__t">
-		<div style="font-size:12.5px;color:var(--muted);font-weight:600">Bom dia</div>
-		<div class="mz-appbar__title" style="font-size:18px">{greetingName}</div>
-	</div>
-	<a href="/merchant/notifications" style="position:relative;text-decoration:none" aria-label="Notificações">
-		<div class="mz-appbar__btn"><Icon name="bell" size={20} /></div>
-	</a>
+<div class="mz-body mz-body--pad" style="gap:14px">
+	{#if stats && plansStore.data}
+		{@const s = stats}
+		<!-- Metric strip -->
+		<div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+			<MetricCard label="Total a receber" value={money(s.totalReceivable)} tone="neutral" />
+			<MetricCard label="Vence hoje" value={money(s.dueToday)} sub="{s.dueTodayCount} planos" tone="amber" />
+			<MetricCard label="Em atraso" value={money(s.overdue)} sub="{s.overdueCount} plano · {s.overdueDays} dias" tone="red" />
+			<MetricCard label="A confirmar" value={money(s.pending)} sub="{s.pendingCount} plano" tone="blue" />
+		</div>
+
+		<!-- Action bar -->
+		<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+			<Btn variant="primary" sm icon="plus" onclick={() => goto('/merchant/sale/create')}>Nova Venda</Btn>
+			<Btn variant="ghost" sm icon="check" onclick={() => goto('/merchant/payment')}>Registar Pagamento</Btn>
+			<div style="margin-left:auto;width:fit-content">
+				<Segmented options={filterOptions} bind:value={filter} />
+			</div>
+		</div>
+
+		<!-- Data table -->
+		<div class="mz-card" style="overflow:hidden;padding:0">
+			<div class="dash-scroll">
+				<div class="dash-grid dash-head">
+					<div>Cliente</div>
+					<div>Produto</div>
+					<div>Restante</div>
+					<div>Estado</div>
+					<div></div>
+				</div>
+				{#each rows as p, i (p.id)}
+					{@const st = PLAN_STATUS[p.state ?? 'active']}
+					<div class="dash-grid dash-row" class:dash-row--bt={i > 0}>
+						<div style="display:flex;align-items:center;gap:10px;min-width:0">
+							<Avatar name={p.customerName ?? ''} gradient size={36} />
+							<div style="min-width:0">
+								<div style="font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{p.customerName}</div>
+								<div style="font-size:12px;color:var(--muted)">{p.currentInstallment}/{p.installmentsTotal} prest.</div>
+							</div>
+						</div>
+						<div style="font-size:13px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{p.productName}</div>
+						<div class="mz-money" style="font-size:13.5px;font-weight:600">{money(p.remaining ?? 0)}</div>
+						<div><Pill tone={st.tone} dot>{st.label}</Pill></div>
+						<div style="position:relative;display:flex;justify-content:flex-end">
+							<button type="button" class="dash-more" aria-label="Acções" onclick={(e) => toggleMenu(e, p.id)}>
+								<Icon name="more" size={16} stroke={1.8} />
+							</button>
+						</div>
+					</div>
+				{/each}
+				{#if rows.length === 0}
+					<div style="padding:32px 16px;text-align:center;color:var(--muted);font-size:13px">Sem planos nesta categoria.</div>
+				{/if}
+			</div>
+		</div>
+	{:else if merchantStore.error}
+		<ErrorState sub={merchantStore.error} onretry={reload} />
+	{:else}
+		<Skeleton height="360px" />
+	{/if}
 </div>
 
-{#if merchantProfileStore.loading}
-	<div class="mz-body mz-body--pad" style="gap:14px;overflow:hidden"><Skeleton height="300px" /></div>
-{:else if hasDashboard}
-	{@const d = merchantStore.data}
-	{#if d}
-	<div class="mz-body mz-body--pad" style="gap:14px;overflow:hidden">
-		<!-- Hero card -->
-		<div style="border-radius:22px;padding:18px 20px;background:var(--hero-gradient);color:#fff;box-shadow:0 14px 30px -12px rgba(22,48,110,.6);position:relative;overflow:hidden">
-			<div style="position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.06)"></div>
-			<div style="font-size:12.5px;font-weight:600;opacity:.8">Valor activo a receber</div>
-			<div class="mz-money" style="font-size:34px;font-weight:600;margin-top:4px;letter-spacing:-1px">{money(d.activeInstallmentValueCentavos / 100)}</div>
-			<div style="display:flex;gap:18px;margin-top:14px;padding-top:13px;border-top:1px solid rgba(255,255,255,.16)">
-				<div><div class="mz-money" style="font-size:17px;font-weight:600">{d.activeCustomers}</div><div style="font-size:11px;opacity:.75;font-weight:500">Clientes activos</div></div>
-				<div><div class="mz-money" style="font-size:17px;font-weight:600">{d.averageCustomerScore ?? '—'}</div><div style="font-size:11px;opacity:.75;font-weight:500">Pontuação média</div></div>
-				<div style="margin-left:auto;align-self:center"><Pill tone={avgScoreTone(d.averageCustomerScore)} dot>{avgScoreLabel(d.averageCustomerScore)}</Pill></div>
-			</div>
-		</div>
-
-		<!-- Actions -->
-		<div style="display:flex;gap:10px">
-			<a href="/merchant/sale/create" class="mz-btn mz-btn--primary mz-btn--block" style="height:50px;font-size:14.5px;border-radius:14px;text-decoration:none">
-				<Icon name="plus" size={19} stroke={2.2} />Criar venda
-			</a>
-			<a href="/merchant/payment/register" class="mz-btn mz-btn--ghost mz-btn--block" style="height:50px;font-size:14.5px;border-radius:14px;text-decoration:none">
-				<Icon name="wallet" size={19} stroke={1.9} />Registar
-			</a>
-		</div>
-
-		<!-- Mini stats -->
-		<div style="display:flex;gap:10px">
-			{#each [
-				{ value: String(d.dueToday.length), label: 'Vencem hoje', tone: 'amber' as const },
-				{ value: String(d.overdueItems.length), label: 'Em atraso', tone: 'red' as const },
-				{ value: String(d.pendingPayments), label: 'A confirmar', tone: 'blue' as const },
-			] as stat}
-				<div class="mz-card mz-card--pad" style="flex:1 1 0;padding:12px 13px">
-					<div style="display:flex;align-items:center;gap:6px">
-						<span class="mz-dot" style="background:var(--{stat.tone === 'amber' ? 'amber' : stat.tone === 'red' ? 'red' : 'blue-800'})"></span>
-						<span class="mz-money" style="font-size:22px;font-weight:600;color:var(--ink)">{stat.value}</span>
-					</div>
-					<div style="font-size:11.5px;color:var(--muted);font-weight:600;margin-top:3px;line-height:1.2">{stat.label}</div>
-				</div>
-			{/each}
-		</div>
-
-		<!-- Today list -->
-		<div style="display:flex;align-items:center;justify-content:space-between;margin-top:2px">
-			<span class="mz-h2">Hoje</span>
-			<span style="font-size:12.5px;color:var(--blue-800);font-weight:700">Ver tudo</span>
-		</div>
-		<div class="mz-list mz-list--card" style="margin-top:-4px">
-			{#each d.dueToday as plan}
-				<div class="mz-row">
-					<Avatar name={plan.id} tone="blue" size={42} />
-					<div class="mz-row__main">
-						<div class="mz-row__title">{plan.id}</div>
-						<div class="mz-row__sub">{plan.status} · {plan.installments.length} prestações</div>
-					</div>
-					<div class="mz-row__end">
-						<span class="mz-money" style="font-size:14.5px;font-weight:600">{money(plan.remainingBalanceCentavos / 100)}</span>
-						<Pill tone="amber" dot>Vence hoje</Pill>
-					</div>
-				</div>
-			{/each}
-		</div>
-	</div>
-	{/if}
-{:else}
-	<!-- No dashboard data yet — show getting-started state with actions -->
-	<div class="mz-body mz-body--pad" style="gap:14px;overflow:hidden">
-		<!-- Hero card — zeroed out -->
-		<div style="border-radius:22px;padding:18px 20px;background:var(--hero-gradient);color:#fff;box-shadow:0 14px 30px -12px rgba(22,48,110,.6);position:relative;overflow:hidden">
-			<div style="position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.06)"></div>
-			<div style="font-size:12.5px;font-weight:600;opacity:.8">Valor activo a receber</div>
-			<div class="mz-money" style="font-size:34px;font-weight:600;margin-top:4px;letter-spacing:-1px">{money(0)}</div>
-			<div style="display:flex;gap:18px;margin-top:14px;padding-top:13px;border-top:1px solid rgba(255,255,255,.16)">
-				<div><div class="mz-money" style="font-size:17px;font-weight:600">0</div><div style="font-size:11px;opacity:.75;font-weight:500">Clientes activos</div></div>
-				<div><div class="mz-money" style="font-size:17px;font-weight:600">—</div><div style="font-size:11px;opacity:.75;font-weight:500">Pontuação média</div></div>
-			</div>
-		</div>
-
-		<!-- Actions -->
-		<div style="display:flex;gap:10px">
-			<a href="/merchant/sale/create" class="mz-btn mz-btn--primary mz-btn--block" style="height:50px;font-size:14.5px;border-radius:14px;text-decoration:none">
-				<Icon name="plus" size={19} stroke={2.2} />Criar venda
-			</a>
-			<a href="/merchant/payment/register" class="mz-btn mz-btn--ghost mz-btn--block" style="height:50px;font-size:14.5px;border-radius:14px;text-decoration:none">
-				<Icon name="wallet" size={19} stroke={1.9} />Registar
-			</a>
-		</div>
-
-		<!-- Getting started -->
-		<Banner tone="blue" icon="info" title="Comece aqui">Crie a sua primeira venda para começar a registar prestações e acompanhar os seus clientes.</Banner>
-
-		{#if !auth.hasPin && !showPinSetup}
-			<Banner tone="amber" icon="lock" title="Proteja a sua conta">
-				Configure um PIN de acesso rápido para entrar sem SMS.
-				<button
-					style="display:block;margin-top:8px;background:var(--amber);color:#fff;border:none;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer"
-					onclick={() => showPinSetup = true}
-				>
-					Configurar PIN
-				</button>
-			</Banner>
-		{/if}
-		{#if showPinSetup}
-			<div class="mz-card mz-card--pad" style="display:flex;flex-direction:column;gap:10px">
-				<span class="mz-h2" style="font-size:15px">Configurar PIN</span>
-				<Field label="PIN (6 dígitos)" bind:value={setupPin} input type="password" inputmode="numeric" />
-				<Field label="Confirmar PIN" bind:value={setupPinConfirm} input type="password" inputmode="numeric" />
-				{#if pinError}
-					<Banner tone="red" icon="alert" title="Erro">{pinError}</Banner>
-				{/if}
-				<div style="display:flex;gap:8px">
-					<Btn variant="primary" disabled={pinLoading || setupPin.length !== 6 || setupPinConfirm.length !== 6} onclick={handleSetupPin}>
-						{pinLoading ? 'A guardar...' : 'Guardar PIN'}
-					</Btn>
-					<Btn variant="ghost" onclick={() => { showPinSetup = false; pinError = ''; }}>
-						Mais tarde
-					</Btn>
-				</div>
-			</div>
-		{/if}
+{#if menuOpenId}
+	<button type="button" class="dash-overlay" aria-label="Fechar menu" onclick={closeMenu}></button>
+	<div class="dash-menu" style="top:{menuY}px;left:{menuX}px">
+		<button type="button" class="dash-menu__i" onclick={() => verCliente(menuPlan?.customerId)}>
+			<Icon name="user" size={14} stroke={1.6} />Ver cliente
+		</button>
+		<button type="button" class="dash-menu__i" onclick={registarPagamento}>
+			<Icon name="check" size={14} stroke={1.6} />Registar pagamento
+		</button>
+		<button type="button" class="dash-menu__i" onclick={enviarLembrete}>
+			<Icon name="send" size={14} stroke={1.6} />Enviar lembrete
+		</button>
 	</div>
 {/if}
 
 <HomeIndicator />
+
+<style>
+	.dash-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+	.dash-grid {
+		display: grid;
+		grid-template-columns: 168px 120px 104px 96px 52px;
+		min-width: 540px;
+		align-items: center;
+	}
+	@media (min-width: 1024px) {
+		.dash-grid { grid-template-columns: 2fr 1.5fr 1fr 110px 52px; min-width: 0; }
+	}
+	.dash-head { padding: 11px 16px; border-bottom: 1px solid var(--line); }
+	.dash-head > div { font-size: 10.5px; font-weight: 700; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+	.dash-row { padding: 12px 16px; }
+	.dash-row--bt { border-top: 1px solid var(--line-2); }
+	.dash-more {
+		width: 30px; height: 30px; border-radius: 9px;
+		border: 1px solid var(--line); background: var(--surface); color: var(--ink-2);
+		display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+	}
+	.dash-more:hover { background: var(--blue-tint); color: var(--blue-800); }
+	.dash-overlay { position: fixed; inset: 0; z-index: 100; background: transparent; border: none; padding: 0; cursor: default; }
+	.dash-menu {
+		position: fixed; z-index: 101; transform: translateX(-100%);
+		width: 200px; background: var(--surface); border: 1px solid var(--line);
+		border-radius: 12px; box-shadow: 0 8px 30px rgba(0, 0, 0, .12); padding: 4px;
+	}
+	.dash-menu__i {
+		display: flex; align-items: center; gap: 8px; width: 100%;
+		padding: 9px 12px; border: none; background: transparent; border-radius: 8px;
+		cursor: pointer; font-family: var(--ui); font-size: 12.5px; font-weight: 500;
+		color: var(--ink); text-align: left;
+	}
+	.dash-menu__i:hover { background: var(--blue-tint); }
+</style>

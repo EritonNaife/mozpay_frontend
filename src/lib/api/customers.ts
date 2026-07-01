@@ -1,13 +1,17 @@
 import { api } from './client';
 import type { ApiResult } from './client';
 import { toCamelCase } from '$lib/utils/case';
-import type { CustomerDashboard, CustomerSummary } from './types';
+import type { CustomerDashboard, CustomerDetail, CustomerSummary } from './types';
 
 export async function listCustomers(): Promise<ApiResult<CustomerSummary[]>> {
     return { ok: false, error: 'NOT_IMPLEMENTED' };
 }
 
 export async function getCustomer(id: string): Promise<ApiResult<CustomerSummary>> {
+    return { ok: false, error: 'NOT_IMPLEMENTED' };
+}
+
+export async function getCustomerDetail(id: string): Promise<ApiResult<CustomerDetail>> {
     return { ok: false, error: 'NOT_IMPLEMENTED' };
 }
 

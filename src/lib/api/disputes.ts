@@ -12,3 +12,11 @@ export async function createDispute(body: CreateDisputeRequest): Promise<ApiResu
 export async function resolveDispute(id: string, body: ResolveDisputeRequest): Promise<ApiResult<DisputeItem>> {
     return { ok: false, error: 'NOT_IMPLEMENTED' };
 }
+
+export async function addDisputeNote(id: string, text: string): Promise<ApiResult<DisputeItem>> {
+    return { ok: false, error: 'NOT_IMPLEMENTED' };
+}
+
+export async function resolveMerchantDispute(id: string, note?: string): Promise<ApiResult<DisputeItem>> {
+    return { ok: false, error: 'NOT_IMPLEMENTED' };
+}

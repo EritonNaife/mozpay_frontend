@@ -1,4 +1,4 @@
-import { getCustomerScore } from '$lib/api/scoring';
+import { getCustomerScore } from '$lib/api';
 import type { CustomerScore } from '$lib/api/scoring';
 
 class ScoringStore {

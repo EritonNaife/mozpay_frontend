@@ -1,6 +1,12 @@
 import { api } from './client';
 import type { ApiResult } from './client';
-import type { PaymentRecord, PaymentRecordDetail, PaymentRegistrationSession } from './types';
+import type {
+	PaymentHistoryItem,
+	PaymentHistoryStats,
+	PaymentRecord,
+	PaymentRecordDetail,
+	PaymentRegistrationSession,
+} from './types';
 
 interface PaymentRegistrationSessionRaw {
 	id: string;
@@ -103,5 +109,13 @@ export async function listPayments(planId: string): Promise<ApiResult<PaymentRec
 }
 
 export async function confirmPayment(_id: string): Promise<ApiResult<PaymentRecord>> {
+	return { ok: false, error: 'NOT_IMPLEMENTED' };
+}
+
+export async function listPaymentHistory(): Promise<ApiResult<PaymentHistoryItem[]>> {
+	return { ok: false, error: 'NOT_IMPLEMENTED' };
+}
+
+export async function getPaymentStats(): Promise<ApiResult<PaymentHistoryStats>> {
 	return { ok: false, error: 'NOT_IMPLEMENTED' };
 }

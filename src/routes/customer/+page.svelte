@@ -1,127 +1,137 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { StatusBar, Avatar, Icon, Pill, ScoreRing, HomeIndicator, Skeleton, EmptyState, ErrorState, Banner, Field, Btn } from '$lib/components/index.js';
+	import { goto } from '$app/navigation';
+	import {
+		StatusBar,
+		Icon,
+		Pill,
+		PremiumAction,
+		LuxuryScoreDial,
+		MonogramAvatar,
+		HomeIndicator,
+		Skeleton,
+		EmptyState,
+		ErrorState
+	} from '$lib/components/index.js';
 	import { money } from '$lib/utils/index.js';
-	import { auth, customerDashboardStore, setHasPin } from '$lib/stores';
-	import { setPin } from '$lib/api/auth';
+	import { customerDashboardStore, scoringStore } from '$lib/stores';
+	import type { CustomerDashboard } from '$lib/api/types';
 
-	let showPinSetup = $state(false);
-	let setupPin = $state('');
-	let setupPinConfirm = $state('');
-	let pinLoading = $state(false);
-	let pinError = $state('');
+	onMount(() => {
+		customerDashboardStore.load();
+		scoringStore.load();
+	});
 
-	async function handleSetupPin() {
-		if (setupPin.length !== 6 || setupPin !== setupPinConfirm) {
-			pinError = setupPin !== setupPinConfirm ? 'Os PINs não coincidem.' : '';
-			return;
-		}
-		pinLoading = true;
-		pinError = '';
-		const result = await setPin(setupPin);
-		pinLoading = false;
-		if (!result.ok) { pinError = 'Não foi possível guardar o PIN.'; return; }
-		setHasPin(true);
-		showPinSetup = false;
+	// Active plan detail if we have one, otherwise the plans list.
+	function planHref(d: CustomerDashboard): string {
+		const id = d.obligations?.[0]?.planId;
+		return id ? `/customer/plans/${id}` : '/customer/plans';
 	}
 
-	onMount(() => { customerDashboardStore.load(); });
+	const appBtn =
+		'width:36px;height:36px;border-radius:10px;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);text-decoration:none;flex:0 0 auto';
+	const rowBtn =
+		'width:100%;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;text-align:left;font-family:var(--ui)';
 </script>
 
 <StatusBar />
 
-<!-- Greeting appbar -->
-<div class="mz-appbar" style="padding-top:6px">
-	<Avatar name={auth.phone || 'Cliente'} tone="blue" size={42} />
-	<div class="mz-appbar__t">
-		<div style="font-size:12.5px;color:var(--muted);font-weight:600">Olá</div>
-		<div class="mz-appbar__title" style="font-size:18px">{auth.phone || 'Cliente'}</div>
-	</div>
-	<a href="/customer/notifications" style="position:relative;text-decoration:none" aria-label="Notificações">
-		<div class="mz-appbar__btn"><Icon name="bell" size={20} /></div>
-	</a>
-</div>
-
-{#if !auth.hasPin && !showPinSetup}
-	<div class="mz-body--pad" style="margin-top:-6px">
-		<Banner tone="amber" icon="lock" title="Proteja a sua conta">
-			Configure um PIN de acesso rápido para entrar sem SMS.
-			<button
-				style="display:block;margin-top:8px;background:var(--amber);color:#fff;border:none;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer"
-				onclick={() => showPinSetup = true}
-			>
-				Configurar PIN
-			</button>
-		</Banner>
-	</div>
-{/if}
-{#if showPinSetup}
-	<div class="mz-body--pad" style="margin-bottom:10px">
-		<div class="mz-card mz-card--pad" style="display:flex;flex-direction:column;gap:10px">
-			<span class="mz-h2" style="font-size:15px">Configurar PIN</span>
-			<Field label="PIN (6 dígitos)" bind:value={setupPin} input type="password" inputmode="numeric" />
-			<Field label="Confirmar PIN" bind:value={setupPinConfirm} input type="password" inputmode="numeric" />
-			{#if pinError}
-				<Banner tone="red" icon="alert" title="Erro">{pinError}</Banner>
-			{/if}
-			<div style="display:flex;gap:8px">
-				<Btn variant="primary" disabled={pinLoading || setupPin.length !== 6 || setupPinConfirm.length !== 6} onclick={handleSetupPin}>
-					{pinLoading ? 'A guardar...' : 'Guardar PIN'}
-				</Btn>
-				<Btn variant="ghost" onclick={() => { showPinSetup = false; pinError = ''; }}>
-					Mais tarde
-				</Btn>
-			</div>
-		</div>
-	</div>
-{/if}
-
 {#if customerDashboardStore.loading}
-	<div class="mz-body mz-body--pad" style="gap:13px;overflow:hidden"><Skeleton height="200px" /></div>
+	<div style="padding:16px"><Skeleton height="200px" /></div>
 {:else if customerDashboardStore.error}
-	<div class="mz-body mz-body--pad" style="gap:13px;overflow:hidden"><ErrorState sub={customerDashboardStore.error} onretry={() => customerDashboardStore.load()} /></div>
+	<div style="padding:16px">
+		<ErrorState
+			title="Erro ao carregar"
+			sub={customerDashboardStore.error}
+			onretry={() => customerDashboardStore.load()}
+		/>
+	</div>
 {:else if !customerDashboardStore.data || customerDashboardStore.data.obligations.length === 0}
-	<div class="mz-body mz-body--pad" style="gap:13px;overflow:hidden"><EmptyState icon="doc" title="Sem planos activos" sub="Ainda não tem planos confirmados" /></div>
+	<div style="padding:16px">
+		<EmptyState icon="doc" title="Sem planos activos" sub="Ainda não tem planos confirmados" />
+	</div>
 {:else}
 	{@const d = customerDashboardStore.data}
-	<div class="mz-body mz-body--pad" style="gap:13px;overflow:hidden">
-		<!-- Next payment hero -->
-		<div style="border-radius:22px;padding:17px 19px;background:var(--hero-gradient);color:#fff;box-shadow:0 14px 30px -12px rgba(22,48,110,.6);position:relative;overflow:hidden">
-			<div style="position:absolute;right:-28px;top:-28px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.06)"></div>
-			<div style="display:flex;justify-content:space-between;align-items:center">
-				<span style="font-size:12.5px;font-weight:600;opacity:.85">Próximo pagamento</span>
-				<Pill tone="amber" dot>Em breve</Pill>
+	<div>
+		<!-- Greeting header -->
+		<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px 6px">
+			<div>
+				<div style="font-size:12px;color:var(--muted);font-weight:500">Bom dia</div>
+				<div style="font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.3px">Olá, {d.userName ?? ''}</div>
 			</div>
-			<div class="mz-money" style="font-size:33px;font-weight:600;margin-top:6px;letter-spacing:-1px">{money(d.nextPaymentCentavos / 100)}</div>
-			<div style="font-size:12.5px;opacity:.8;margin-top:2px">{d.obligations.length} plano(s) · {money(d.totalOwedCentavos / 100)} em dívida</div>
-			<div class="mz-prog" style="margin-top:13px;background:rgba(255,255,255,.18)"><div class="mz-prog__f" style="width:8%;background:#fff"></div></div>
+			<a href="/customer/notifications" aria-label="Notificações" style={appBtn}>
+				<Icon name="bell" size={18} stroke={1.6} />
+			</a>
 		</div>
 
-		<!-- Trust score strip -->
-		<a href="/customer/score" class="mz-card mz-card--pad" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit">
-			<ScoreRing score={d.score} size={58} />
-			<div style="flex:1;min-width:0">
-				<div style="font-size:12.5px;color:var(--muted);font-weight:600">Pontuação de confiança</div>
-				<div style="font-weight:700;font-size:15.5px;color:var(--ink);margin-top:1px">{d.scoreLabel}</div>
-				<div style="font-size:11.5px;color:var(--muted);margin-top:1px">Pague a tempo para subir de nível</div>
+		<!-- Next payment hero -->
+		<div style="padding:8px 16px 0">
+			<div style="border-radius:var(--r-card-lg);padding:14px 16px;background:var(--hero-gradient);color:#fff;box-shadow:var(--shadow-hero);position:relative;overflow:hidden">
+				<div style="position:absolute;right:-40px;top:-40px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.04)"></div>
+				<div style="position:relative">
+					<div style="display:flex;justify-content:space-between;align-items:center">
+						<span style="font-size:11.5px;font-weight:600;opacity:.8">Próximo pagamento</span>
+						<Pill tone="amber" dot>Vence hoje</Pill>
+					</div>
+					<div class="mz-money" style="font-size:28px;font-weight:600;margin-top:4px;letter-spacing:-.8px">{money(d.nextAmount ?? 0)}</div>
+					<div style="font-size:11px;opacity:.65;margin-top:2px">1 plano activo</div>
+				</div>
 			</div>
-			<Icon name="chevR" size={18} style="color:var(--faint)" />
-		</a>
+		</div>
+
+		<!-- Quick actions -->
+		<div style="display:flex;gap:6px;padding:18px 16px 0">
+			<PremiumAction icon="send" label="Pagar" onclick={() => goto(planHref(d))} />
+			<PremiumAction icon="doc" label="Planos" onclick={() => goto('/customer/plans')} />
+			<PremiumAction icon="trophy" label="Confiança" onclick={() => goto('/customer/score')} />
+			<PremiumAction icon="receipt" label="Recibos" onclick={() => goto('/customer/notifications')} />
+		</div>
+
+		<!-- Trust score row -->
+		<div style="padding:18px 16px 0">
+			<button onclick={() => goto('/customer/score')} style={rowBtn}>
+				<LuxuryScoreDial score={scoringStore.data?.score ?? 0} size={46} />
+				<div style="flex:1;min-width:0">
+					<div style="font-weight:600;font-size:14px;color:var(--ink)">Confiança</div>
+					<div style="font-size:12px;color:var(--muted);margin-top:1px">{scoringStore.data?.tier ?? ''}</div>
+				</div>
+				<Icon name="chevR" size={16} stroke={1.8} style="color:var(--muted)" />
+			</button>
+		</div>
 
 		<!-- My plans -->
-		<div style="display:flex;align-items:center;justify-content:space-between;margin-top:2px">
-			<span class="mz-h2">Os meus planos</span>
-			<Pill tone="blue">{d.obligations.length} activo(s)</Pill>
+		<div style="padding:18px 16px 0">
+			<div class="mz-eyebrow" style="margin-bottom:10px">Os meus planos</div>
+			<button onclick={() => goto(planHref(d))} style={rowBtn}>
+				<MonogramAvatar name={d.activePlanMerchant ?? ''} size={38} />
+				<div style="flex:1;min-width:0">
+					<div style="font-weight:600;font-size:14px;color:var(--ink)">{d.activePlanMerchant ?? ''}</div>
+					<div style="font-size:12px;color:var(--muted);margin-top:1px">{d.currentInstallment ?? 0}/{d.installmentsTotal ?? 0} prestações · {money(d.nextAmount ?? 0)}</div>
+				</div>
+				<Pill tone="green" dot>Activo</Pill>
+			</button>
 		</div>
-		<div class="mz-list mz-list--card" style="margin-top:-4px">
-			{#each d.obligations as obligation}
-				<a href="/customer/plans/{obligation.planId}" class="mz-row" style="text-decoration:none;color:inherit">
-					<div style="width:42px;height:42px;border-radius:12px;background:var(--blue-tint);color:var(--blue-800);display:flex;align-items:center;justify-content:center;flex:0 0 auto"><Icon name="doc" size={21} stroke={1.7} /></div>
-					<div class="mz-row__main"><div class="mz-row__title">{obligation.merchantName}</div><div class="mz-row__sub">{obligation.productName} · {money(obligation.remainingBalanceCentavos / 100)} restantes</div></div>
-					<div class="mz-row__end"><Pill tone="green" dot>Activo</Pill><Icon name="chevR" size={16} style="color:var(--faint)" /></div>
-				</a>
-			{/each}
+
+		<!-- Recent activity -->
+		<div style="padding:18px 16px 0">
+			<div class="mz-eyebrow" style="margin-bottom:10px">Actividade recente</div>
+			<div style="background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden">
+				{#each d.recentActivity ?? [] as a, i (i)}
+					<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;{i ? 'border-top:1px solid rgba(0,0,0,.04)' : ''}">
+						<div style="width:30px;height:30px;border-radius:50%;background:var(--green-tint);color:var(--green);display:flex;align-items:center;justify-content:center;flex:0 0 auto">
+							<Icon name="check" size={14} stroke={2.2} />
+						</div>
+						<div style="flex:1;min-width:0">
+							<div style="font-weight:600;font-size:14px;color:var(--ink)">{a.merchant}</div>
+							<div style="font-size:12px;color:var(--muted);margin-top:1px">{a.method} · {a.date}</div>
+						</div>
+						<span class="mz-money" style="font-weight:600;font-size:14px;color:var(--green)">-{money(a.amount)}</span>
+					</div>
+				{/each}
+			</div>
 		</div>
+
+		<div style="height:24px"></div>
 	</div>
 {/if}
 
