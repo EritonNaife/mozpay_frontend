@@ -30,6 +30,6 @@
 </div>
 
 <Footer>
-	<a href="/customer" style="text-decoration:none"><Btn variant="primary" block lg>Concluído</Btn></a>
+	<a href="/customer" style="text-decoration:none"><Btn variant="primary" block>Concluído</Btn></a>
 </Footer>
 <HomeIndicator />

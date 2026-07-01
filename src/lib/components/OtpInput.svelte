@@ -56,7 +56,7 @@
 	}
 </script>
 
-<div style="display:flex;gap:9px" onpaste={handlePaste}>
+<div style="display:flex;gap:8px" onpaste={handlePaste}>
 	{#each boxes as d, i}
 		<input
 			type="text"
@@ -69,7 +69,7 @@
 			value={d}
 			oninput={(e) => handleInput(i, e)}
 			onkeydown={(e) => handleKeydown(i, e)}
-			style="flex:1 1 0;height:62px;border-radius:15px;border:1.5px solid var(--line);background:var(--surface);text-align:center;font-family:var(--display);font-size:26px;font-weight:600;color:var(--ink);outline:none;-moz-appearance:textfield"
+			style="flex:1 1 0;min-width:0;height:52px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);text-align:center;font-family:var(--display);font-size:20px;font-weight:600;color:var(--ink);outline:none;-moz-appearance:textfield"
 		/>
 	{/each}
 </div>

@@ -56,6 +56,6 @@
 </div>
 
 <Footer>
-	<a href={copy[status].href} style="text-decoration:none"><Btn variant="primary" block lg iconEnd="fwd">{copy[status].cta}</Btn></a>
+	<a href={copy[status].href} style="text-decoration:none"><Btn variant="primary" block iconEnd="fwd">{copy[status].cta}</Btn></a>
 </Footer>
 <HomeIndicator />

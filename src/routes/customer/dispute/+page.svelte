@@ -46,6 +46,6 @@
 </div>
 
 <Footer>
-	<Btn variant="danger" block lg icon="flag" onclick={submit}>Enviar contestação</Btn>
+	<Btn variant="danger" block icon="flag" onclick={submit}>Enviar contestação</Btn>
 </Footer>
 <HomeIndicator />

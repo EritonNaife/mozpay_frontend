@@ -77,7 +77,7 @@
 		<p style="color:var(--muted);font-size:12px;margin:0">{merchantName}</p>
 	</div>
 	<Footer>
-		<Btn variant="primary" block lg onclick={() => goto('/customer')}>Voltar ao início</Btn>
+		<Btn variant="primary" block onclick={() => goto('/customer')}>Voltar ao início</Btn>
 	</Footer>
 	<HomeIndicator />
 
@@ -98,7 +98,7 @@
 		<Banner tone="blue" icon="info">Ao confirmar, o pagamento será processado via {methodLabel}.</Banner>
 	</div>
 	<Footer>
-		<Btn variant="primary" block lg icon="check" disabled={loading} onclick={confirmPayment}>
+		<Btn variant="primary" block icon="check" disabled={loading} onclick={confirmPayment}>
 			{loading ? 'A processar...' : 'Confirmar pagamento'}
 		</Btn>
 	</Footer>
@@ -119,7 +119,7 @@
 		</div>
 	</div>
 	<Footer>
-		<Btn variant="primary" block lg iconEnd="fwd" onclick={() => (step = 'confirm')}>Continuar</Btn>
+		<Btn variant="primary" block iconEnd="fwd" onclick={() => (step = 'confirm')}>Continuar</Btn>
 	</Footer>
 	<HomeIndicator />
 {/if}

@@ -152,7 +152,7 @@
 
 {#if context}
 	<Footer>
-		<Btn variant="green" block lg icon="check" disabled={acting} onclick={handleConfirm}>
+		<Btn variant="green" block icon="check" disabled={acting} onclick={handleConfirm}>
 			{acting ? 'A processar...' : 'Sim, confirmo o plano'}
 		</Btn>
 		<Btn variant="ghost" block icon="flag" disabled={acting} style="color:var(--red)" onclick={handleReject}>

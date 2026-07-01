@@ -40,7 +40,7 @@
 {/if}
 
 <Footer>
-	<a href="/customer/payment/done" style="text-decoration:none"><Btn variant="green" block lg icon="check">Confirmar — está correcto</Btn></a>
+	<a href="/customer/payment/done" style="text-decoration:none"><Btn variant="green" block icon="check">Confirmar — está correcto</Btn></a>
 	<a href="/customer/dispute" style="text-decoration:none"><Btn variant="ghost" block icon="flag" style="color:var(--red)">Contestar este registo</Btn></a>
 </Footer>
 <HomeIndicator />

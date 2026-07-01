@@ -208,7 +208,7 @@
 		{/if}
 	</div>
 	<Footer>
-		<Btn variant="primary" block lg disabled={!phoneValid || loading} iconEnd={loading ? undefined : 'fwd'} onclick={handlePhoneSubmit}>
+		<Btn variant="primary" block disabled={!phoneValid || loading} iconEnd={loading ? undefined : 'fwd'} onclick={handlePhoneSubmit}>
 			{loading ? 'A enviar...' : 'Continuar'}
 		</Btn>
 		<button
@@ -251,7 +251,7 @@
 		<Banner tone="blue" icon="info" title="Sabia que?">O {BRAND_NAME} nunca lhe pede o código por chamada. Não o partilhe com ninguém.</Banner>
 	</div>
 	<Footer>
-		<Btn variant="primary" block lg disabled={loading || otpCode.length !== 6} onclick={submitOtp}>
+		<Btn variant="primary" block disabled={loading || otpCode.length !== 6} onclick={submitOtp}>
 			{loading ? 'A verificar...' : 'Verificar'}
 		</Btn>
 	</Footer>
@@ -321,7 +321,7 @@
 		</div>
 	</div>
 	<Footer>
-		<Btn variant="primary" block lg onclick={() => goto(returnTo || '/customer')}>Começar</Btn>
+		<Btn variant="primary" block onclick={() => goto(returnTo || '/customer')}>Começar</Btn>
 	</Footer>
 	<HomeIndicator />
 {/if}

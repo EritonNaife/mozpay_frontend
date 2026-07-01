@@ -56,7 +56,7 @@
 
 <Footer>
 	<div style="display:flex;flex-direction:column;gap:8px">
-		<Btn variant="primary" block lg disabled={loading || oldPin.length !== 6 || newPin.length !== 6 || confirmPin.length !== 6} iconEnd={loading ? undefined : 'lock'} onclick={handleChangePin}>
+		<Btn variant="primary" block disabled={loading || oldPin.length !== 6 || newPin.length !== 6 || confirmPin.length !== 6} iconEnd={loading ? undefined : 'lock'} onclick={handleChangePin}>
 			{loading ? 'A alterar...' : 'Alterar PIN'}
 		</Btn>
 		<button

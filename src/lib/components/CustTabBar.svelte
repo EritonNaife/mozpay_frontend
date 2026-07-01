@@ -17,7 +17,7 @@
 				class:cust-dock__i--on={on}
 				aria-current={on ? 'page' : undefined}
 			>
-				<Icon name={t.icon} size={20} stroke={on ? 2 : 1.6} />
+				<Icon name={t.icon} size={19} stroke={on ? 2 : 1.6} />
 				<span class="cust-dock__lbl">{t.label}</span>
 			</a>
 		{/each}

@@ -99,7 +99,7 @@
 	</div>
 
 	<Footer>
-		<Btn variant="primary" block lg icon="send" onclick={() => goto('/customer/payment?planId=' + id)}>Pagar {money(plan.nextAmount ?? 0)}</Btn>
+		<Btn variant="primary" block icon="send" onclick={() => goto('/customer/payment?planId=' + id)}>Pagar {money(plan.nextAmount ?? 0)}</Btn>
 	</Footer>
 {/if}
 

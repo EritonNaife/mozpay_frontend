@@ -181,7 +181,7 @@
 		{/if}
 	</div>
 	<Footer>
-		<Btn variant="primary" block lg disabled={loading} iconEnd={loading ? undefined : 'fwd'} onclick={handlePhoneSubmit}>
+		<Btn variant="primary" block disabled={loading} iconEnd={loading ? undefined : 'fwd'} onclick={handlePhoneSubmit}>
 			{loading ? 'A enviar...' : 'Continuar'}
 		</Btn>
 		<p style="font-size:11px;color:var(--faint);text-align:center;line-height:1.5">Ao continuar aceita os Termos e a Política de Privacidade do {BRAND_NAME}.</p>
@@ -213,7 +213,7 @@
 		</div>
 	</div>
 	<Footer>
-		<Btn variant="primary" block lg disabled={loading} onclick={handleLoginWithPin}>
+		<Btn variant="primary" block disabled={loading} onclick={handleLoginWithPin}>
 			{loading ? 'A verificar...' : 'Entrar'}
 		</Btn>
 	</Footer>
@@ -249,7 +249,7 @@
 		</div>
 	</div>
 	<Footer>
-		<Btn variant="primary" block lg disabled={loading} onclick={submitOtp}>
+		<Btn variant="primary" block disabled={loading} onclick={submitOtp}>
 			{loading ? 'A verificar...' : 'Verificar'}
 		</Btn>
 	</Footer>
@@ -279,7 +279,7 @@
 		</div>
 	</div>
 	<Footer>
-		<Btn variant="primary" block lg disabled={loading} iconEnd={loading ? undefined : 'fwd'} onclick={handleCreateProfile}>
+		<Btn variant="primary" block disabled={loading} iconEnd={loading ? undefined : 'fwd'} onclick={handleCreateProfile}>
 			{loading ? 'A criar conta...' : 'Criar conta e começar'}
 		</Btn>
 	</Footer>
@@ -306,7 +306,7 @@
 	</div>
 	<Footer>
 		<div style="display:flex;flex-direction:column;gap:8px">
-			<Btn variant="primary" block lg disabled={loading || pinCode.length !== 6 || pinConfirm.length !== 6} iconEnd={loading ? undefined : 'lock'} onclick={handleSetPin}>
+			<Btn variant="primary" block disabled={loading || pinCode.length !== 6 || pinConfirm.length !== 6} iconEnd={loading ? undefined : 'lock'} onclick={handleSetPin}>
 				{loading ? 'A guardar...' : 'Guardar PIN'}
 			</Btn>
 			<button

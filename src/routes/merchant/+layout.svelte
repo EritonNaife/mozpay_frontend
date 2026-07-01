@@ -15,7 +15,7 @@
 </script>
 
 {#if bare}
-	{@render children()}
+	<div class="mz-screen">{@render children()}</div>
 {:else if auth.isAuthenticated}
 	<div class="mz-shell">
 		<SideNav items={MERCHANT_NAV} footer={MERCHANT_NAV_FOOTER} rootHref="/merchant" />
