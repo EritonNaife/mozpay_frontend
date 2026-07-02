@@ -21,7 +21,7 @@ async function verifyToken(token: string): Promise<{ sub: string; roles: string[
 		const { payload } = await jose.jwtVerify(token, key, { algorithms: ['HS256'] });
 		return {
 			sub: payload.sub as string,
-			roles: (payload.roles as string[]) ?? [],
+			roles: ((payload.roles as string[]) ?? []).map((r) => r.toLowerCase()),
 		};
 	} catch {
 		return null;
@@ -49,12 +49,24 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	// Server-side route guarding — redirect before render
+	const inMerchant = pathname === '/merchant' || pathname.startsWith('/merchant/');
+	const inCustomer = pathname === '/customer' || pathname.startsWith('/customer/');
+
 	if (!event.locals.user) {
 		if (PROTECTED_MERCHANT.test(pathname)) {
 			throw redirect(307, '/merchant/onboarding');
 		}
 		if (PROTECTED_CUSTOMER.test(pathname)) {
 			throw redirect(307, '/customer/login');
+		}
+	} else {
+		// Strict one-side sessions: an authenticated user may only enter their own area.
+		const roles = event.locals.user.roles;
+		if (inMerchant && !roles.includes('merchant')) {
+			throw redirect(307, '/customer');
+		}
+		if (inCustomer && !roles.includes('customer')) {
+			throw redirect(307, '/merchant');
 		}
 	}
 

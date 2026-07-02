@@ -4,14 +4,14 @@ import {
 	getPaymentStats,
 	recordPayment,
 	startPaymentRegistrationSession,
-} from '$lib/api';
+} from '$lib/shared/api';
 import type {
 	PaymentHistoryItem,
 	PaymentHistoryStats,
 	PaymentRecord,
 	PaymentRecordDetail,
 	PaymentRegistrationSession,
-} from '$lib/api/types';
+} from '$lib/shared/api/types';
 
 class PaymentsStore {
 	data: PaymentRecord[] | null = $state(null);

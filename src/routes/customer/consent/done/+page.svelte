@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { StatusBar, AppBar, Icon, Btn, Footer, HomeIndicator } from '$lib/components/index.js';
-	import { auth } from '$lib/stores';
-	import { BRAND_NAME } from '$lib/brand.js';
+	import { StatusBar, AppBar, Icon, Btn, Footer, HomeIndicator } from '$lib/shared';
+	import { auth } from '$lib/shared';
+	import { BRAND_NAME } from '$lib/shared/brand.js';
 
 	let status = $state<'confirmed' | 'rejected'>('confirmed');
 

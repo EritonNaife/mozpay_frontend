@@ -1,5 +1,5 @@
-import { getProfile } from '$lib/api';
-import type { MerchantProfileResponse } from '$lib/api/types';
+import { getProfile } from '$lib/merchant/api';
+import type { MerchantProfileResponse } from '$lib/shared/api/types';
 
 class MerchantProfileStore {
     data: MerchantProfileResponse | null = $state(null);

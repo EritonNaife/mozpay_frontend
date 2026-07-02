@@ -2,10 +2,12 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
-	import { StatusBar, Avatar, Pill, Btn, Card, Icon, ProgressBar, Skeleton, HomeIndicator } from '$lib/components/index.js';
-	import { money, RISK_LONG, PLAN_STATUS, METHOD, DISPUTE_STATUS } from '$lib/utils/index.js';
-	import { customersStore, toast } from '$lib/stores';
-	import type { CustomerDetail, PlanSummary, DisputeStatus } from '$lib/api/types';
+	import { StatusBar, Pill, Btn, Card, Icon, Skeleton, HomeIndicator } from '$lib/shared';
+	import { Avatar, ProgressBar } from '$lib/merchant';
+	import { money, RISK_LONG, PLAN_STATUS, METHOD, DISPUTE_STATUS } from '$lib/shared/utils/index.js';
+	import { customersStore } from '$lib/merchant';
+	import { toast } from '$lib/shared';
+	import type { CustomerDetail, PlanSummary, DisputeStatus } from '$lib/shared/api/types';
 
 	let detail: CustomerDetail | null = $state(null);
 	let loading = $state(true);

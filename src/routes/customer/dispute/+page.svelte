@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { StatusBar, AppBar, Icon, Btn, Banner, Footer, HomeIndicator, OptionCard } from '$lib/components/index.js';
+	import { StatusBar, AppBar, Icon, Btn, Banner, Footer, HomeIndicator } from '$lib/shared';
+	import { OptionCard } from '$lib/customer';
 	import { goto } from '$app/navigation';
-	import { toast } from '$lib/stores/toast.svelte.js';
+	import { toast } from '$lib/shared';
 
 	let reason = $state('none');
 

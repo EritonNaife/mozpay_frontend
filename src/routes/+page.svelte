@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { Brand } from '$lib/components/index.js';
-	import { auth } from '$lib/stores';
+	import { Brand } from '$lib/shared';
+	import { auth } from '$lib/shared';
 
 	$effect(() => {
 		if (auth.isAuthenticated) {
-			goto(auth.roles.includes('MERCHANT') ? '/merchant' : '/customer');
+			goto(auth.roles.includes('merchant') ? '/merchant' : '/customer');
 		}
 	});
 </script>

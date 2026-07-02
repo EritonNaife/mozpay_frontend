@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { StatusBar, Icon, MonogramAvatar, HomeIndicator } from '$lib/components/index.js';
-	import { auth, logout, customerDashboardStore } from '$lib/stores';
-	import { BRAND_NAME } from '$lib/brand.js';
+	import { StatusBar, Icon, HomeIndicator } from '$lib/shared';
+	import { MonogramAvatar } from '$lib/customer';
+	import { auth, logout } from '$lib/shared';
+	import { customerDashboardStore } from '$lib/customer';
+	import { BRAND_NAME } from '$lib/shared/brand.js';
 
 	const rows = [
 		{ icon: 'lock', label: 'Alterar PIN', href: '/customer/profile/change-pin' },

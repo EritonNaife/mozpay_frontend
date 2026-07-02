@@ -2,13 +2,13 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { StatusBar, Icon, Btn, Banner, Pill, Brand, Footer, HomeIndicator, Skeleton, EmptyState, ErrorState } from '$lib/components/index.js';
-	import { toast } from '$lib/stores/toast.svelte.js';
-	import { auth } from '$lib/stores';
-	import { money } from '$lib/utils/index.js';
-	import { getConfirmationContext, confirmPlan, rejectPlan } from '$lib/api/plans';
-	import type { ConfirmationContext } from '$lib/api/types';
-	import { BRAND_NAME } from '$lib/brand.js';
+	import { StatusBar, Icon, Btn, Banner, Pill, Brand, Footer, HomeIndicator, Skeleton, EmptyState, ErrorState } from '$lib/shared';
+	import { toast } from '$lib/shared';
+	import { auth } from '$lib/shared';
+	import { money } from '$lib/shared/utils/index.js';
+	import { getConfirmationContext, confirmPlan, rejectPlan } from '$lib/shared/api';
+	import type { ConfirmationContext } from '$lib/shared/api/types';
+	import { BRAND_NAME } from '$lib/shared/brand.js';
 
 	let token = $state('');
 	let context = $state<ConfirmationContext | null>(null);

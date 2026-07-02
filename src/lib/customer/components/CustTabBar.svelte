@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import Icon from './Icon.svelte';
-	import { CUSTOMER_NAV, isActive } from '$lib/nav.js';
+	import { Icon } from '$lib/shared';
+	import { CUSTOMER_NAV, isActive } from '$lib/shared/nav.js';
 	interface Props { active?: string; }
 	let { active }: Props = $props();
 	let pathname = $derived(page.url.pathname);

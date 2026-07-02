@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { StatusBar, AppBar, Btn, Pill, Footer, HomeIndicator, Icon, Skeleton, EmptyState, ErrorState } from '$lib/components/index.js';
+	import { StatusBar, AppBar, Btn, Pill, Footer, HomeIndicator, Icon, Skeleton, EmptyState, ErrorState } from '$lib/shared';
 	import { goto } from '$app/navigation';
-	import { money } from '$lib/utils/index.js';
-	import { plansStore } from '$lib/stores';
+	import { money } from '$lib/shared/utils/index.js';
+	import { plansStore } from '$lib/shared';
 
 	onMount(() => {
 		const id = $page.params.id ?? '';

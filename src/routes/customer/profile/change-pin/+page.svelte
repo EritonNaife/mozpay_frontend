@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { StatusBar, AppBar, Field, Banner, Btn, Footer, HomeIndicator } from '$lib/components/index.js';
-	import { setPin } from '$lib/api';
-	import { setHasPin, toast } from '$lib/stores';
+	import { StatusBar, AppBar, Field, Banner, Btn, Footer, HomeIndicator } from '$lib/shared';
+	import { setPin } from '$lib/shared/api';
+	import { setHasPin, toast } from '$lib/shared';
 
 	let oldPin = $state('');
 	let newPin = $state('');

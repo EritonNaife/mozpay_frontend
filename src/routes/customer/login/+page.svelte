@@ -2,10 +2,12 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { StatusBar, Btn, Banner, Brand, Footer, HomeIndicator, OtpInput, PinPad, Icon } from '$lib/components/index.js';
-	import { requestOtp, setPin } from '$lib/api';
-	import { auth, login, setHasPin, customerDashboardStore } from '$lib/stores';
-	import { BRAND_NAME } from '$lib/brand.js';
+	import { StatusBar, Btn, Banner, Brand, Footer, HomeIndicator, OtpInput, Icon } from '$lib/shared';
+	import { PinPad } from '$lib/customer';
+	import { requestOtp, setPin } from '$lib/shared/api';
+	import { auth, login, setHasPin } from '$lib/shared';
+	import { customerDashboardStore } from '$lib/customer';
+	import { BRAND_NAME } from '$lib/shared/brand.js';
 
 	type Step = 'phone' | 'pin' | 'otp' | 'setpin' | 'welcome';
 
@@ -91,7 +93,7 @@
 		const res = await fetch('/auth/login-with-pin', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ phone_number: phoneNumber, pin: value }),
+			body: JSON.stringify({ phone_number: phoneNumber, pin: value, role: 'customer' }),
 		});
 		const result = await res.json();
 		loading = false;
@@ -111,7 +113,7 @@
 		const res = await fetch('/auth/verify-otp', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ phone_number: phoneNumber, code: otpCode }),
+			body: JSON.stringify({ phone_number: phoneNumber, code: otpCode, role: 'customer' }),
 		});
 		const result = await res.json();
 		loading = false;

@@ -1,5 +1,5 @@
-import { listDisputes, addDisputeNote, resolveMerchantDispute } from '$lib/api';
-import type { DisputeItem } from '$lib/api/types';
+import { listDisputes, addDisputeNote, resolveMerchantDispute } from '$lib/merchant/api';
+import type { DisputeItem } from '$lib/shared/api/types';
 
 class DisputesStore {
     data: DisputeItem[] | null = $state(null);

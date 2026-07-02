@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { StatusBar, AppBar, HomeIndicator, Icon, Skeleton, EmptyState, ErrorState } from '$lib/components/index.js';
-	import { notificationsStore } from '$lib/stores';
-	import type { NotificationItem } from '$lib/api/types';
+	import { StatusBar, AppBar, HomeIndicator, Icon, Skeleton, EmptyState, ErrorState } from '$lib/shared';
+	import { notificationsStore } from '$lib/shared';
+	import type { NotificationItem } from '$lib/shared/api/types';
 
 	type NotifType = 'payment' | 'overdue' | 'dispute' | 'pending';
 

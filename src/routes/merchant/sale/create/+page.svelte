@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { StatusBar, HomeIndicator, Footer, Icon, Banner, Btn, Avatar, StepIndicator } from '$lib/components/index.js';
-	import { customersStore, toast } from '$lib/stores';
-	import { money } from '$lib/utils/index.js';
+	import { StatusBar, HomeIndicator, Footer, Icon, Banner, Btn } from '$lib/shared';
+	import { Avatar, StepIndicator } from '$lib/merchant';
+	import { customersStore } from '$lib/merchant';
+	import { toast } from '$lib/shared';
+	import { money } from '$lib/shared/utils/index.js';
 	import { goto } from '$app/navigation';
-	import type { CustomerSummary } from '$lib/api/types';
+	import type { CustomerSummary } from '$lib/shared/api/types';
 
 	const STEPS = ['Cliente', 'Produto', 'Plano', 'Confirmar'];
 	const MONTHS_PT = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];

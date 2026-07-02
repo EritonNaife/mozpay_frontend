@@ -1,5 +1,5 @@
-import { listPlans, getPlan } from '$lib/api';
-import type { PlanSummary, PlanDetail } from '$lib/api/types';
+import { listPlans, getPlan } from '$lib/shared/api';
+import type { PlanSummary, PlanDetail } from '$lib/shared/api/types';
 
 class PlansStore {
     data: PlanSummary[] | null = $state(null);

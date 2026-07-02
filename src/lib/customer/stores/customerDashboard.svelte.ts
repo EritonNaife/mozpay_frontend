@@ -1,5 +1,5 @@
-import { getCustomerDashboard } from '$lib/api';
-import type { CustomerDashboard } from '$lib/api/types';
+import { getCustomerDashboard } from '$lib/customer/api';
+import type { CustomerDashboard } from '$lib/shared/api/types';
 
 class CustomerDashboardStore {
     data: CustomerDashboard | null = $state(null);

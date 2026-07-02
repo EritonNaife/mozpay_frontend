@@ -14,9 +14,15 @@ export const USE_MOCK = import.meta.env.VITE_USE_MOCK_API === 'true';
 const JWT_SIGNING_KEY =
 	process.env.JWT_SIGNING_KEY || 'unsafe-local-jwt-signing-key-for-development-only';
 
-/** Response body the login pages expect (minus the jwt, which goes in the cookie). */
+export type Side = 'customer' | 'merchant';
+
+/** Coerce arbitrary input to a valid single side (defaults to customer). */
+export function normalizeRole(input: unknown): Side {
+	return input === 'merchant' ? 'merchant' : 'customer';
+}
+
+/** Base response body the login pages expect (roles are added per request). */
 export const MOCK_AUTH_RESPONSE = {
-	roles: ['MERCHANT', 'CUSTOMER'] as string[],
 	is_new: false,
 	has_pin: true,
 };
@@ -24,7 +30,7 @@ export const MOCK_AUTH_RESPONSE = {
 /** Mint a valid HS256 token accepted by hooks.server.ts. */
 export async function mintMockToken(
 	sub = 'mock-user',
-	roles: string[] = MOCK_AUTH_RESPONSE.roles,
+	roles: string[] = ['customer'],
 ): Promise<string> {
 	const key = new TextEncoder().encode(JWT_SIGNING_KEY);
 	return await new jose.SignJWT({ roles })

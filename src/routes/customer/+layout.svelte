@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { SideNav, CustTabBar } from '$lib/components/index.js';
-	import { CUSTOMER_NAV } from '$lib/nav.js';
-	import { auth } from '$lib/stores';
+	import { SideNav } from '$lib/shared';
+	import { CustTabBar } from '$lib/customer';
+	import { CUSTOMER_NAV } from '$lib/shared/nav.js';
+	import { auth } from '$lib/shared';
 
 	let { children } = $props();
 	let bare = $derived(

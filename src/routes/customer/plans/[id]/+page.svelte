@@ -2,9 +2,10 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { StatusBar, Icon, Pill, Btn, Card, Footer, MonogramAvatar, HomeIndicator, Skeleton, EmptyState, ErrorState } from '$lib/components/index.js';
-	import { money } from '$lib/utils/index.js';
-	import { plansStore } from '$lib/stores';
+	import { StatusBar, Icon, Pill, Btn, Card, Footer, HomeIndicator, Skeleton, EmptyState, ErrorState } from '$lib/shared';
+	import { MonogramAvatar } from '$lib/customer';
+	import { money } from '$lib/shared/utils/index.js';
+	import { plansStore } from '$lib/shared';
 
 	let id = $state('');
 

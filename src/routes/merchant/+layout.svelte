@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
-	import { SideNav, TabBar, MerchantTopBar } from '$lib/components/index.js';
-	import { MERCHANT_NAV, MERCHANT_NAV_FOOTER } from '$lib/nav.js';
-	import { auth, notificationsStore, merchantProfileStore } from '$lib/stores';
+	import { SideNav } from '$lib/shared';
+	import { TabBar, MerchantTopBar } from '$lib/merchant';
+	import { MERCHANT_NAV, MERCHANT_NAV_FOOTER } from '$lib/shared/nav.js';
+	import { auth, notificationsStore } from '$lib/shared';
+	import { merchantProfileStore } from '$lib/merchant';
 
 	let { children } = $props();
 	let bare = $derived(page.url.pathname.startsWith('/merchant/onboarding'));

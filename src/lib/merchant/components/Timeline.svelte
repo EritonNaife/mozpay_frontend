@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Icon from './Icon.svelte';
+	import { Icon } from '$lib/shared';
 
 	type EventType = 'opened' | 'note' | 'action' | 'resolved';
 	interface TimelineEvent {

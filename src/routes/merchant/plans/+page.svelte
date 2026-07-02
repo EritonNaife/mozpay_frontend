@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { StatusBar, AppBar, Avatar, Pill, Icon, Btn, Skeleton, EmptyState, ErrorState } from '$lib/components/index.js';
-	import { money, PLAN_STATUS } from '$lib/utils/index.js';
-	import { plansStore } from '$lib/stores/index.js';
+	import { StatusBar, AppBar, Pill, Icon, Btn, Skeleton, EmptyState, ErrorState } from '$lib/shared';
+	import { Avatar } from '$lib/merchant';
+	import { money, PLAN_STATUS } from '$lib/shared/utils/index.js';
+	import { plansStore } from '$lib/shared';
 
 	onMount(() => { plansStore.load(); });
 </script>

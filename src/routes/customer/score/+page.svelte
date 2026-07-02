@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { StatusBar, Icon, Banner, LuxuryScoreDial, HomeIndicator, Skeleton, ErrorState } from '$lib/components/index.js';
-	import { scoringStore } from '$lib/stores';
-	import type { ScoreLabel } from '$lib/api/types';
-	import { BRAND_NAME } from '$lib/brand.js';
+	import { StatusBar, Icon, Banner, HomeIndicator, Skeleton, ErrorState } from '$lib/shared';
+	import { LuxuryScoreDial } from '$lib/customer';
+	import { scoringStore } from '$lib/customer';
+	import type { ScoreLabel } from '$lib/shared/api/types';
+	import { BRAND_NAME } from '$lib/shared/brand.js';
 
 	const toneColor: Record<string, string> = {
 		green: 'var(--green)',

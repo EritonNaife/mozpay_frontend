@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { StatusBar, AppBar, Icon, Btn, Footer, HomeIndicator } from '$lib/components/index.js';
-	import { auth } from '$lib/stores';
+	import { StatusBar, AppBar, Icon, Btn, Footer, HomeIndicator } from '$lib/shared';
+	import { auth } from '$lib/shared';
 </script>
 
 <StatusBar />

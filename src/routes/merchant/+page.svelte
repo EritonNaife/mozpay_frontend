@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { StatusBar, HomeIndicator, MetricCard, Btn, Segmented, Avatar, Pill, Icon, Skeleton, ErrorState } from '$lib/components/index.js';
-	import { PLAN_STATUS, money } from '$lib/utils/index.js';
-	import { merchantStore, merchantProfileStore, plansStore, toast } from '$lib/stores';
+	import { StatusBar, HomeIndicator, Btn, Segmented, Pill, Icon, Skeleton, ErrorState } from '$lib/shared';
+	import { MetricCard, Avatar } from '$lib/merchant';
+	import { PLAN_STATUS, money } from '$lib/shared/utils/index.js';
+	import { merchantStore, merchantProfileStore } from '$lib/merchant';
+	import { plansStore, toast } from '$lib/shared';
 
 	let filter = $state('todos');
 	const filterOptions = [

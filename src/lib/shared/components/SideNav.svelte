@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import Brand from './Brand.svelte';
 	import Icon from './Icon.svelte';
-	import { isActive, type NavItem } from '$lib/nav.js';
+	import { isActive, type NavItem } from '$lib/shared/nav.js';
 	interface Props { items: NavItem[]; rootHref: string; footer?: NavItem[]; }
 	let { items, rootHref, footer }: Props = $props();
 	let pathname = $derived(page.url.pathname);

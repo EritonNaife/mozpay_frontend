@@ -1,5 +1,5 @@
-import { listNotifications, markRead } from '$lib/api';
-import type { NotificationItem } from '$lib/api/types';
+import { listNotifications, markRead } from '$lib/shared/api';
+import type { NotificationItem } from '$lib/shared/api/types';
 
 class NotificationsStore {
     data: NotificationItem[] | null = $state(null);

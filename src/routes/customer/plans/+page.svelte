@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { StatusBar, AppBar, Icon, Pill, Segmented, MonogramAvatar, Skeleton, EmptyState, ErrorState } from '$lib/components/index.js';
-	import { money } from '$lib/utils/index.js';
-	import { plansStore } from '$lib/stores';
-	import type { PlanStatus, PlanSummary } from '$lib/api/types';
+	import { StatusBar, AppBar, Icon, Pill, Segmented, Skeleton, EmptyState, ErrorState } from '$lib/shared';
+	import { MonogramAvatar } from '$lib/customer';
+	import { money } from '$lib/shared/utils/index.js';
+	import { plansStore } from '$lib/shared';
+	import type { PlanStatus, PlanSummary } from '$lib/shared/api/types';
 
 	let search = $state('');
 	let filter = $state('todos');

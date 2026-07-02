@@ -1,5 +1,5 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
-import { USE_MOCK, mintMockToken, MOCK_AUTH_RESPONSE } from '$lib/server/mockAuth.js';
+import { USE_MOCK, mintMockToken, MOCK_AUTH_RESPONSE, normalizeRole } from '$lib/shared/server/mockAuth.js';
 
 const BACKEND = process.env.BACKEND_URL || 'http://localhost:8000';
 const IS_PROD = process.env.NODE_ENV === 'production';
@@ -20,7 +20,9 @@ async function proxy(pathname: string, request: Request, existingToken?: string)
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	if (USE_MOCK) {
-		const token = await mintMockToken();
+		const body = await request.json().catch(() => ({}));
+		const role = normalizeRole(body?.role);
+		const token = await mintMockToken('mock-user', [role]);
 		cookies.set('mozpay_token', token, {
 			path: '/',
 			httpOnly: true,
@@ -28,7 +30,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 			sameSite: 'lax',
 			maxAge: 60 * 60 * 24 * 30,
 		});
-		return json(MOCK_AUTH_RESPONSE);
+		return json({ ...MOCK_AUTH_RESPONSE, roles: [role] });
 	}
 
 	const { status, data } = await proxy('/auth/login-with-pin', request);

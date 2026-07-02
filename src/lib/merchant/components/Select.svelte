@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Icon from './Icon.svelte';
+	import { Icon } from '$lib/shared';
 
 	interface Option { value: string; label: string; disabled?: boolean; }
 	interface Props {

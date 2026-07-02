@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Icon from './Icon.svelte';
-	import { METHOD } from '$lib/utils/status.js';
+	import { Icon } from '$lib/shared';
+	import { METHOD } from '$lib/shared/utils/status.js';
 
 	interface Props { method: 'mpesa' | 'cash' | 'bank'; }
 	let { method }: Props = $props();

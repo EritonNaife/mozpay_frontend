@@ -1,5 +1,5 @@
-import { listCustomers, getCustomer, getCustomerDetail } from '$lib/api';
-import type { CustomerDetail, CustomerSummary } from '$lib/api/types';
+import { listCustomers, getCustomer, getCustomerDetail } from '$lib/merchant/api';
+import type { CustomerDetail, CustomerSummary } from '$lib/shared/api/types';
 
 class CustomersStore {
     data: CustomerSummary[] | null = $state(null);

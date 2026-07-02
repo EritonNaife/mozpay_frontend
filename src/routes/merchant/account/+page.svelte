@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { StatusBar, AppBar, Avatar, Btn, Card, Banner, Icon, Field, Toggle, Modal, Skeleton, EmptyState, ErrorState } from '$lib/components/index.js';
-	import { merchantProfileStore, toast } from '$lib/stores';
+	import { StatusBar, AppBar, Btn, Card, Banner, Icon, Field, Skeleton, EmptyState, ErrorState } from '$lib/shared';
+	import { Avatar, Toggle, Modal } from '$lib/merchant';
+	import { merchantProfileStore } from '$lib/merchant';
+	import { toast } from '$lib/shared';
 
 	// ── Profile: read-through view + saved overrides + edit draft ──
 	let editing = $state(false);

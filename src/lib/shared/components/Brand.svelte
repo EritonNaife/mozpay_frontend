@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BRAND_NAME } from '$lib/brand.js';
+	import { BRAND_NAME } from '$lib/shared/brand.js';
 	interface Props { size?: number; showName?: boolean; light?: boolean; }
 	let { size = 52, showName = false, light = false }: Props = $props();
 </script>

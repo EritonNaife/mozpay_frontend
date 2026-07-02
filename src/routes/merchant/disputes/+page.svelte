@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import {
-		StatusBar, AppBar, HomeIndicator, Avatar, Pill, Icon, Banner, Btn, Field,
-		Segmented, MetricCard, Timeline, Skeleton, EmptyState, ErrorState,
-	} from '$lib/components/index.js';
-	import { money, DISPUTE_STATUS } from '$lib/utils/index.js';
-	import { disputesStore, toast } from '$lib/stores/index.js';
+	import { StatusBar, AppBar, HomeIndicator, Pill, Icon, Banner, Btn, Field, Segmented, Skeleton, EmptyState, ErrorState } from '$lib/shared';
+	import { Avatar, MetricCard, Timeline } from '$lib/merchant';
+	import { money, DISPUTE_STATUS } from '$lib/shared/utils/index.js';
+	import { disputesStore } from '$lib/merchant';
+	import { toast } from '$lib/shared';
 
 	type DispKey = 'open' | 'review' | 'resolved';
 

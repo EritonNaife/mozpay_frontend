@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { StatusBar, AppBar, Icon, Btn, Pill, Banner, Footer, HomeIndicator, Skeleton, EmptyState, ErrorState } from '$lib/components/index.js';
-	import { notificationsStore } from '$lib/stores';
+	import { StatusBar, AppBar, Icon, Btn, Pill, Banner, Footer, HomeIndicator, Skeleton, EmptyState, ErrorState } from '$lib/shared';
+	import { notificationsStore } from '$lib/shared';
 
 	onMount(() => { notificationsStore.load(); });
 </script>

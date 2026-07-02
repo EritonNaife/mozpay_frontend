@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { StatusBar, AppBar, Icon, HomeIndicator, Skeleton, EmptyState, ErrorState } from '$lib/components/index.js';
-	import { notificationsStore } from '$lib/stores';
+	import { StatusBar, AppBar, Icon, HomeIndicator, Skeleton, EmptyState, ErrorState } from '$lib/shared';
+	import { notificationsStore } from '$lib/shared';
 
 	const colMap: Record<string, string> = { red: 'var(--red)', amber: 'var(--amber)', green: 'var(--green)', blue: 'var(--blue-800)' };
 	const bgMap: Record<string, string> = { red: 'var(--red-tint)', amber: 'var(--amber-tint)', green: 'var(--green-tint)', blue: 'var(--blue-tint)' };

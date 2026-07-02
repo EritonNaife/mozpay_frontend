@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { StatusBar, AppBar, Avatar, Icon, HomeIndicator, Skeleton, EmptyState, ErrorState, BarChart } from '$lib/components/index.js';
-	import { money, grp } from '$lib/utils/index.js';
-	import { merchantStore, customersStore, plansStore, paymentsStore } from '$lib/stores';
+	import { StatusBar, AppBar, Icon, HomeIndicator, Skeleton, EmptyState, ErrorState } from '$lib/shared';
+	import { Avatar, BarChart } from '$lib/merchant';
+	import { money, grp } from '$lib/shared/utils/index.js';
+	import { merchantStore, customersStore } from '$lib/merchant';
+	import { plansStore, paymentsStore } from '$lib/shared';
 
 	type StatTone = 'green' | 'amber' | 'blue' | 'neutral';
 	const stFg: Record<StatTone, string> = { green: 'var(--green)', amber: 'var(--amber)', blue: 'var(--blue-800)', neutral: 'var(--ink)' };

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { StatusBar, Icon, HomeIndicator } from '$lib/components/index.js';
-	import { plansStore } from '$lib/stores';
-	import { BRAND_NAME } from '$lib/brand.js';
+	import { StatusBar, Icon, HomeIndicator } from '$lib/shared';
+	import { plansStore } from '$lib/shared';
+	import { BRAND_NAME } from '$lib/shared/brand.js';
 
 	onMount(() => { plansStore.load(); });
 </script>

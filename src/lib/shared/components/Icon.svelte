@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ICON_PATHS } from '$lib/icons/paths.js';
+	import { ICON_PATHS } from '$lib/shared/icons/paths.js';
 
 	interface Props {
 		name: string;

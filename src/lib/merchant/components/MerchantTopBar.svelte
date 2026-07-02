@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import Icon from './Icon.svelte';
-	import Btn from './Btn.svelte';
-	import { customersStore, plansStore, notificationsStore, merchantProfileStore } from '$lib/stores';
-	import { money } from '$lib/utils/index.js';
+	import { Icon, Btn } from '$lib/shared';
+	import { customersStore } from '$lib/merchant/stores/customers.svelte.js';
+	import { merchantProfileStore } from '$lib/merchant/stores/merchantProfile.svelte.js';
+	import { plansStore } from '$lib/shared/stores/plans.svelte.js';
+	import { notificationsStore } from '$lib/shared/stores/notifications.svelte.js';
+	import { money } from '$lib/shared/utils/index.js';
 
 	let query = $state('');
 	let focused = $state(false);

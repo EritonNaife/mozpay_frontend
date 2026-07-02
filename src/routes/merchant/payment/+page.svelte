@@ -1,21 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import {
-		StatusBar,
-		AppBar,
-		Btn,
-		Select,
-		Segmented,
-		MetricCard,
-		MethodChip,
-		Pill,
-		Icon,
-		Skeleton,
-		ErrorState,
-	} from '$lib/components/index.js';
-	import { money, METHOD, PAYMENT_STATUS } from '$lib/utils/index.js';
-	import { paymentsStore, customersStore, plansStore, toast } from '$lib/stores';
-	import type { PaymentHistoryItem } from '$lib/api/types';
+	import { StatusBar, AppBar, Btn, Segmented, Pill, Icon, Skeleton, ErrorState } from '$lib/shared';
+	import { Select, MetricCard, MethodChip } from '$lib/merchant';
+	import { money, METHOD, PAYMENT_STATUS } from '$lib/shared/utils/index.js';
+	import { paymentsStore, plansStore, toast } from '$lib/shared';
+	import { customersStore } from '$lib/merchant';
+	import type { PaymentHistoryItem } from '$lib/shared/api/types';
 
 	type Method = 'mpesa' | 'cash' | 'bank';
 

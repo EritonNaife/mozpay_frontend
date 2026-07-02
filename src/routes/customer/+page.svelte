@@ -1,21 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import {
-		StatusBar,
-		Icon,
-		Pill,
-		PremiumAction,
-		LuxuryScoreDial,
-		MonogramAvatar,
-		HomeIndicator,
-		Skeleton,
-		EmptyState,
-		ErrorState
-	} from '$lib/components/index.js';
-	import { money } from '$lib/utils/index.js';
-	import { customerDashboardStore, scoringStore } from '$lib/stores';
-	import type { CustomerDashboard } from '$lib/api/types';
+	import { StatusBar, Icon, Pill, HomeIndicator, Skeleton, EmptyState, ErrorState } from '$lib/shared';
+	import { PremiumAction, LuxuryScoreDial, MonogramAvatar } from '$lib/customer';
+	import { money } from '$lib/shared/utils/index.js';
+	import { customerDashboardStore, scoringStore } from '$lib/customer';
+	import type { CustomerDashboard } from '$lib/shared/api/types';
 
 	onMount(() => {
 		customerDashboardStore.load();

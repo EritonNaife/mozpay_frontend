@@ -1,5 +1,5 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
-import { USE_MOCK, mintMockToken, MOCK_AUTH_RESPONSE } from '$lib/server/mockAuth.js';
+import { USE_MOCK, mintMockToken, MOCK_AUTH_RESPONSE } from '$lib/shared/server/mockAuth.js';
 
 const BACKEND = process.env.BACKEND_URL || 'http://localhost:8000';
 const IS_PROD = process.env.NODE_ENV === 'production';

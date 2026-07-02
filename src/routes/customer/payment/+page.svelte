@@ -2,9 +2,10 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { StatusBar, Icon, Btn, Card, Banner, OptionCard, Footer, HomeIndicator } from '$lib/components/index.js';
-	import { money } from '$lib/utils/index.js';
-	import { plansStore, paymentsStore } from '$lib/stores';
+	import { StatusBar, Icon, Btn, Card, Banner, Footer, HomeIndicator } from '$lib/shared';
+	import { OptionCard } from '$lib/customer';
+	import { money } from '$lib/shared/utils/index.js';
+	import { plansStore, paymentsStore } from '$lib/shared';
 
 	let step = $state<'method' | 'confirm' | 'success'>('method');
 	let method = $state('mpesa');

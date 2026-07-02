@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { StatusBar, AppBar, Btn, Field, Banner, Brand, Footer, HomeIndicator, OtpInput, Segmented, Icon } from '$lib/components/index.js';
-	import { requestOtp, setPin, createProfile } from '$lib/api';
-	import { login, merchantProfileStore, auth, setHasPin } from '$lib/stores';
-	import { BRAND_NAME } from '$lib/brand.js';
+	import { StatusBar, AppBar, Btn, Field, Banner, Brand, Footer, HomeIndicator, OtpInput, Segmented, Icon } from '$lib/shared';
+	import { requestOtp, setPin } from '$lib/shared/api';
+	import { createProfile } from '$lib/merchant/api';
+	import { login, auth, setHasPin } from '$lib/shared';
+	import { merchantProfileStore } from '$lib/merchant';
+	import { BRAND_NAME } from '$lib/shared/brand.js';
 
 	let step = $state<'login' | 'pin' | 'otp' | 'profile' | 'setpin'>('login');
 	let phoneNumber = $state('');
@@ -60,7 +62,7 @@
 		const res = await fetch('/auth/login-with-pin', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ phone_number: phoneNumber, pin: pinCode }),
+			body: JSON.stringify({ phone_number: phoneNumber, pin: pinCode, role: 'merchant' }),
 		});
 		const result = await res.json();
 		loading = false;
@@ -89,7 +91,7 @@
 		const res = await fetch('/auth/verify-otp', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ phone_number: phoneNumber, code: otpCode }),
+			body: JSON.stringify({ phone_number: phoneNumber, code: otpCode, role: 'merchant' }),
 		});
 		const result = await res.json();
 		loading = false;

@@ -1,5 +1,5 @@
-import { getCustomerScore } from '$lib/api';
-import type { CustomerScore } from '$lib/api/scoring';
+import { getCustomerScore } from '$lib/customer/api';
+import type { CustomerScore } from '$lib/customer/api/scoring';
 
 class ScoringStore {
 	data: CustomerScore | null = $state(null);

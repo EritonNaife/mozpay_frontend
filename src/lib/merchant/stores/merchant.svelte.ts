@@ -1,5 +1,5 @@
-import { getMerchantDashboard, getMerchantStats } from '$lib/api';
-import type { MerchantDashboard, MerchantStats } from '$lib/api/types';
+import { getMerchantDashboard, getMerchantStats } from '$lib/merchant/api';
+import type { MerchantDashboard, MerchantStats } from '$lib/shared/api/types';
 
 class MerchantStore {
     data: MerchantDashboard | null = $state(null);

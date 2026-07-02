@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onNavigate } from '$app/navigation';
 	import '../app.css';
-	import Toast from '$lib/components/Toast.svelte';
-	import { hydrate } from '$lib/stores';
-	import { BRAND_NAME } from '$lib/brand.js';
+	import { Toast } from '$lib/shared';
+	import { hydrate } from '$lib/shared';
+	import { BRAND_NAME } from '$lib/shared/brand.js';
 	let { data, children } = $props();
 
 	$effect(() => {
