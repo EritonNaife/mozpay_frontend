@@ -1,4 +1,4 @@
-import * as real from './api-modules';
+import * as real from './modules';
 import * as mock from './mock';
 
 const useMock = import.meta.env.VITE_USE_MOCK_API === 'true';
@@ -7,10 +7,6 @@ export const {
     requestOtp,
     verifyOtp,
     setPin,
-    getMerchantDashboard,
-    getMerchantStats,
-    getProfile,
-    createProfile,
     listPlans,
     getPlan,
     previewPlan,
@@ -26,16 +22,6 @@ export const {
     listPayments,
     listPaymentHistory,
     getPaymentStats,
-    listCustomers,
-    getCustomer,
-    getCustomerDetail,
-    getCustomerDashboard,
     listNotifications,
     markRead,
-    listDisputes,
-    createDispute,
-    resolveDispute,
-    addDisputeNote,
-    resolveMerchantDispute,
-    getCustomerScore,
 } = useMock ? mock : real;

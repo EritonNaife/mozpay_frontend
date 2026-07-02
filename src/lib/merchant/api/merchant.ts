@@ -1,7 +1,7 @@
-import { api } from './client';
-import type { ApiResult } from './client';
-import { toCamelCase } from '$lib/utils/case';
-import type { CreateMerchantProfileRequest, MerchantDashboard, MerchantProfileResponse, MerchantStats } from './types';
+import { api } from '$lib/shared/api/client';
+import type { ApiResult } from '$lib/shared/api/client';
+import { toCamelCase } from '$lib/shared/utils/case';
+import type { CreateMerchantProfileRequest, MerchantDashboard, MerchantProfileResponse, MerchantStats } from '$lib/shared/api/types';
 
 export async function getMerchantDashboard(): Promise<ApiResult<MerchantDashboard>> {
     const res = await api<Record<string, unknown>>('/merchant/dashboard', { method: 'GET' });

@@ -1,4 +1,4 @@
-import type { ApiResult } from '../client';
+import type { ApiResult } from '$lib/shared/api/client';
 import type { CustomerScore } from '../scoring';
 
 export async function getCustomerScore(): Promise<ApiResult<CustomerScore>> {

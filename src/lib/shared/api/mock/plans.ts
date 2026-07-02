@@ -10,7 +10,7 @@ import type {
     PlanSummary,
     RejectPlanRequest,
 } from '../types';
-import { addPlan, getPlanDetail, plans, updatePlanStatus, uuid } from './data';
+import { addPlan, getPlanDetail, plans, updatePlanStatus, uuid } from '../data';
 
 function mapPlanSummary(plan: PlanSummary) {
     return { ...plan };

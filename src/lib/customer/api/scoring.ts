@@ -1,6 +1,6 @@
-import { api } from './client';
-import type { ApiResult } from './client';
-import type { ScoreLabel } from './types';
+import { api } from '$lib/shared/api/client';
+import type { ApiResult } from '$lib/shared/api/client';
+import type { ScoreLabel } from '$lib/shared/api/types';
 
 /** A single trust-score factor row (customer score screen). */
 export interface ScoreFactor {

@@ -26,7 +26,7 @@ import type {
     PlanSummary,
     ScoreLabel,
     UUID,
-} from '../types';
+} from './types';
 
 export function uuid(n = 8): UUID {
     return `${n}x`.replace(/x/g, () => Math.floor(Math.random() * 16).toString(16));

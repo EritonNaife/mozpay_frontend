@@ -1,6 +1,6 @@
 import type { ApiResult } from '../client';
 import type { OtpVerifyResponse, Role } from '../types';
-import { uuid } from './data';
+import { uuid } from '../data';
 
 export function requestOtp(_phone: string, _role?: Role): Promise<ApiResult<{ status: string }>> {
     return Promise.resolve({ ok: true, data: { status: 'otp_sent' } });

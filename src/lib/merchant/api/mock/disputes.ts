@@ -1,5 +1,5 @@
-import type { ApiResult } from '../client';
-import type { CreateDisputeRequest, DisputeItem, ResolveDisputeRequest } from '../types';
+import type { ApiResult } from '$lib/shared/api/client';
+import type { CreateDisputeRequest, DisputeItem, ResolveDisputeRequest } from '$lib/shared/api/types';
 import {
     addDispute,
     addDisputeNoteById,
@@ -7,7 +7,7 @@ import {
     resolveDisputeById,
     resolveMerchantDisputeById,
     uuid,
-} from './data';
+} from '$lib/shared/api/data';
 
 export async function listDisputes(): Promise<ApiResult<DisputeItem[]>> {
     return { ok: true, data: [...disputes] };

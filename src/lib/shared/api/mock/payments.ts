@@ -15,7 +15,7 @@ import {
     plans,
     recordPaymentSession,
     uuid,
-} from './data';
+} from '../data';
 
 export async function startPaymentRegistrationSession(planId: string): Promise<ApiResult<PaymentRegistrationSession>> {
     const plan = plans.find((p) => p.id === planId);

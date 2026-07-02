@@ -1,6 +1,6 @@
-import type { ApiResult } from '../client';
-import type { CreateMerchantProfileRequest, MerchantDashboard, MerchantProfileResponse, MerchantStats } from '../types';
-import { getMerchantDashboard as buildMerchantDashboard, merchantDetails, merchantProfile, merchantStats } from './data';
+import type { ApiResult } from '$lib/shared/api/client';
+import type { CreateMerchantProfileRequest, MerchantDashboard, MerchantProfileResponse, MerchantStats } from '$lib/shared/api/types';
+import { getMerchantDashboard as buildMerchantDashboard, merchantDetails, merchantProfile, merchantStats } from '$lib/shared/api/data';
 
 export async function getMerchantDashboard(): Promise<ApiResult<MerchantDashboard>> {
     return { ok: true, data: buildMerchantDashboard() };

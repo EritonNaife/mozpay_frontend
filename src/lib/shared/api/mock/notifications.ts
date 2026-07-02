@@ -1,6 +1,6 @@
 import type { ApiResult } from '../client';
 import type { NotificationItem } from '../types';
-import { notifications } from './data';
+import { notifications } from '../data';
 
 export async function listNotifications(): Promise<ApiResult<NotificationItem[]>> {
     return { ok: true, data: [...notifications] };

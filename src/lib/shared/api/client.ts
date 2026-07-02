@@ -1,4 +1,4 @@
-import { auth } from '$lib/stores/auth.svelte';
+import { auth } from '$lib/shared/stores/auth.svelte.js';
 
 export type ApiResult<T> = { ok: true; data: T } | { ok: false; error: string; message?: string; data?: unknown };
 

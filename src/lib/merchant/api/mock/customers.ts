@@ -1,10 +1,6 @@
-import type { ApiResult } from '../client';
-import type { CustomerDashboard, CustomerDetail, CustomerSummary } from '../types';
-import {
-    customers,
-    getCustomerDashboard as buildCustomerDashboard,
-    getCustomerDetail as buildCustomerDetail,
-} from './data';
+import type { ApiResult } from '$lib/shared/api/client';
+import type { CustomerDetail, CustomerSummary } from '$lib/shared/api/types';
+import { customers, getCustomerDetail as buildCustomerDetail } from '$lib/shared/api/data';
 
 export async function listCustomers(): Promise<ApiResult<CustomerSummary[]>> {
     return { ok: true, data: customers };
@@ -20,8 +16,4 @@ export async function getCustomerDetail(id: string): Promise<ApiResult<CustomerD
     const detail = buildCustomerDetail(id);
     if (!detail) return { ok: false, error: 'NOT_FOUND', message: 'Cliente não encontrado' };
     return { ok: true, data: detail };
-}
-
-export async function getCustomerDashboard(): Promise<ApiResult<CustomerDashboard>> {
-    return { ok: true, data: buildCustomerDashboard() };
 }

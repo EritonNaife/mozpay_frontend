@@ -1,5 +1,5 @@
-import type { ApiResult } from './client';
-import type { DisputeItem, CreateDisputeRequest, ResolveDisputeRequest } from './types';
+import type { ApiResult } from '$lib/shared/api/client';
+import type { DisputeItem, CreateDisputeRequest, ResolveDisputeRequest } from '$lib/shared/api/types';
 
 export async function listDisputes(): Promise<ApiResult<DisputeItem[]>> {
     return { ok: false, error: 'NOT_IMPLEMENTED' };
